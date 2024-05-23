@@ -1,0 +1,22 @@
+{
+  "name": "project-mo",
+  "version": "0.0.1",
+  "description": "Project to create a digital version of MO.",
+  "main": "bundle.js",
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Steele",
+  "license": "Unlicense",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "rollup": "^4.17.2"
+  },
+  "dependencies": {
+    "@andrewscripts/deck-of-cards.js": "^2.0.4",
+    "dragula": "^3.7.3"
+  }
+}

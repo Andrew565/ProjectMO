@@ -1,8 +1,9 @@
 :root {
-  --light-main: #eee;
-  --dark-main: #333;
-  --blue: #007EA7;
-  --red: darkred;
+  --cerulean: #007ea7ff;
+--aquamarine: #1affd5ff;
+--black: #090909ff;
+--french-gray: #b8b3beff;
+--ultra-pink: #f26df9ff;
 }
 
 * {
@@ -11,7 +12,12 @@
 
 body {
   font-family: sans-serif;
-  color: var(--dark-main);
+  color: var(--black);
+  background-color: var(--french-gray);
+}
+
+h1 {
+  color: var(--cerulean);
 }
 
 .gu-mirror {
@@ -32,14 +38,14 @@ body {
 
 .grid {
   display: grid;
-  height: 98vw;
+  height: 78vh;
   width: 98vw;
   grid-template-columns: 1.2fr 1fr 1fr 1fr 1.2fr;
   grid-template-rows: 1.2fr 1fr 1fr 1fr 1.2fr;
 }
 
 .pile {
-  background-color: darkgoldenrod;
+  background-color: var(--cerulean);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,12 +53,16 @@ body {
 }
 
 .mo-card {
-  background-color: #eee;
-  border: 1px solid #333;
+  background-color: var(--french-gray);
+  border: 1px solid var(--aquamarine);
   border-radius: 5px;
   height: 100px;
   width: 70px;
   z-index: calc(-1 * var(--index));
+}
+
+.mo-card:not(:first-child) {
+  margin-left: -70px;
 }
 
 .mo-card.mo-card--empty {

@@ -202,6 +202,12 @@ function shiftCards(fromPile, toPile) {
 
   // if card found, add it to destination pile and reveal next top card
   if (topCard) {
+    // If top card is an Ace or Joker, move the whole "to" pile to the bottom of the draw pile before moving the top card
+    if (topCard.nameRank === "Ace" || topCard.nameRank === "Joker") {
+      const cards = /** @type {MO52Card[]} */ (PILES[toPile].cards).splice(0);
+      PILES.e5.cards.push(...cards);
+    }
+
     // get next top card and reveal it (if there is one)
     if (PILES[fromPile].cards.length) PILES[fromPile].cards[0].facingDown = false;
 
@@ -266,3 +272,9 @@ drake.on("drop", (_, target, source) => {
 document.addEventListener("DOMContentLoaded", function () {
   newGame();
 });
+
+// TODO: handle dropping an ace or joker
+// TODO: handle adding "armor" to royals
+// TODO: handle lining up enough points to kill a royal
+// TODO: Add instructions for how to play
+// TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile

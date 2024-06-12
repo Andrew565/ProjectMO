@@ -9,12 +9,23 @@
   <body>
     <header>
       <h1>Project M.O.</h1>
+      <details>
+        <summary>Rules</summary>
+        <p>This game is based on the physical card game Matrix Overload by <a href="https://www.patreon.com/notwriting">Michael Elliot</a>. This digital version was created by <a href="https://andrew565.github.io/">Andrew Steele</a>.</p>
+        <p>The goal of this game is to defeat the Royal cards (Jacks, Queens, Kings) before they become too powerful to beat, and before you run out of cards to play against them.</p>
+        <p>To play, you must line up cards in rows or columns in order to defeat the royal cards. The value of the two cards closest to the royal's row or column must add up to the value of the royal, or higher. A Jack can be beaten with any two cards adding up to at least 11 points, a Queen requires at least 12 points and the cards must be of the same color as the Queen, and a King must be beaten with two same-suited cards adding up to at least 13 points.</p>
+        <p>When you draw a Royal, they get placed in one of the outer piles. They should be placed next to the highest-value same-suited card, if a place is available. If no same-suited space is available, then the highest same-color space should be chosen. If no same-color space is available, then the royal should be placed next to the highest card with an open spot. If two spots are open (like on a corner), you may choose either of the two places.</p>
+        <p>Cards from Ace to 10 are placed on the nine inner piles, and can only be placed on piles where the top card is the same value or lower than the card to be placed. For example, a 7 can be placed on top of anything from an Ace through a 7, but not on an 8, 9, or 10.</p>
+        <p>If a 'number' card cannot be placed on an inner pile, it must be added to a royal as 'armor'. For example, if there is no valid place in the inner piles to add a 2, you would then add it to a Jack, Queen, or King, which would increase that royal's difficulty to defeat by two points. A Jack with a 2 would require 13 points to defeat instead of 11. The normal rules about suits and/or color requirements remain the same.</p>
+      </details>
     </header>
+
     <section id="gameControls">
       <button id="newGameButton">Start a new game</button>
       <button id="undoButton">Undo</button>
       <button id="redoButton">Redo</button>
     </section>
+
     <main id="mainGrid" class="grid">
       <div id="a1" class="pile"></div>
       <div id="b1" class="pile pile--outer"></div>

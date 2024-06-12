@@ -893,7 +893,7 @@
 	 * @prop {number} numberRank
 	 * @prop {string} nameRank
 	 * @prop {string} initial // The card's "symbol"
-	 * @prop {"Clubs" | "Hearts" | "Spades" | "Diamonds" | "Joker"} suit
+	 * @prop {string} suit
 	 * @prop {string} name
 	 * @prop {number} value
 	 * @prop {boolean} facingDown
@@ -904,24 +904,43 @@
 	  H: "❤️",
 	  S: "♠️",
 	  D: "♦️",
+	  J: "🤪",
 	};
 
-	// Initialize Deck
+	// Initialize Cards
 	const BaseCards = /** @type {MO52Card[]} */ (R.standard52DeckOfCards).map((card) => {
+	  // Adjust value for zero-based numberRank
 	  if (card.nameRank !== "Ace") {
 	    card.value = card.numberRank + 2;
 	  }
+
+	  // Set Aces to value of 1
+	  if (card.nameRank === "Ace") {
+	    card.value = 1;
+	  }
+
+	  // Rename 10 to X so it centers better
 	  if (card.initial === "10") {
 	    card.initial = "X";
 	  }
+
+	  // Setup suit icons
 	  card.suit = suitIcons[card.suit[0]];
+	  // Turn all cards face-down to start
 	  card.facingDown = true;
+
 	  return card;
 	});
-	BaseCards.push({ ...R.FancyJoker, value: 0, facingDown: true });
+	// Add a Joker with value of 0
+	BaseCards.push({ ...R.FancyJoker, initial: "0", value: 0, facingDown: true, suit: suitIcons["J"] });
+	// Initialize Deck
 	const moDeck = new e(BaseCards);
+
+	// Initialize Pile IDs
+	const OuterPileIDs = ["b1", "c1", "d1", "a2", "e2", "a3", "e3", "a4", "e4", "b5", "c5", "d5"];
 	const InnerPileIDs = ["b2", "c2", "d2", "b3", "c3", "d3", "b4", "c4", "d4"];
 
+	// Initialize Piles
 	const PILES = {
 	  a2: { cards: [] },
 	  a3: { cards: [] },
@@ -947,7 +966,7 @@
 	  e5: { cards: moDeck.drawPile },
 	};
 
-	// Get templates for later
+	// Get card templates for later
 	const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
 	const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceDownCardTemplate"));
 	const emptyTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("emptyCardTemplate"));
@@ -1049,9 +1068,10 @@
 
 	function renderCards() {
 	  Object.entries(PILES).forEach(([pileName, { cards }]) => {
-	    // For each pile, render out cards
-	    // Make all of the cards
-	    const cardEls = /** @type {MO52Card[]} */ (cards).map((card, index) => {
+	    // For each pile, render out cards in reverse order, so that [0] ends up with the highest index (but only for inner piles)
+	    const cardsClone = Array.from(cards);
+	    // if (InnerPileIDs.includes(pileName)) cardsClone.reverse();
+	    const cardEls = cardsClone.map((card, index) => {
 	      if (card.facingDown) {
 	        return makeFaceDownCard(index);
 	      } else {
@@ -1143,11 +1163,111 @@
 	  };
 	};
 
+	// Counts up value of pile's cards, used for royal piles
+	const getPileValue = (/** @type {MO52Card[]} */ pileCards) => {
+	  return pileCards.reduce((acc, card) => {
+	    return (acc += card.value);
+	  }, 0);
+	};
+
+	// Checks if a royal card is present and face-down
+	const checkIfRoyalDefeated = (/** @type {MO52Card[]} */ pileCards) => {
+	  return pileCards.some((card) => isRoyal(card) && card.facingDown);
+	};
+
+	// Function to determine which piles are 'legal' targets for drag and drop
+	const getValidPiles = (/** @type {number} */ cardValue) => {
+	  const validInnerIds = InnerPileIDs.reduce((acc, pileID) => {
+	    // Get top card, if any
+	    const topPileCard = /** @type {MO52Card[]} */ (PILES[pileID].cards).slice(0)[0];
+
+	    // If a Royal, skip the inner IDs
+	    if (cardValue > 10) {
+	      return acc;
+	    }
+
+	    // If an Ace or Joker, add the pileID
+	    if (cardValue <= 1) {
+	      acc.push(pileID);
+	    }
+
+	    // Check if topPileCard is same or lower value, or if pile is empty
+	    if ((topPileCard && topPileCard.value <= cardValue) || !topPileCard) {
+	      acc.push(pileID);
+	    }
+
+	    return acc;
+	  }, /** @type {string[]} */ ([]));
+
+	  if (validInnerIds.length) {
+	    return validInnerIds;
+	  } else {
+	    const validOuterIds = OuterPileIDs.reduce((acc, pileID) => {
+	      // Check if empty
+	      const pileCards = /** @type {MO52Card[]} */ (PILES[pileID].cards).slice(0);
+	      if (!pileCards) {
+	        acc.push(pileID);
+	      }
+
+	      // If there's a royal, check that the royal hasn't already been defeated
+	      const defeatedRoyal = checkIfRoyalDefeated(pileCards);
+	      if (defeatedRoyal) {
+	        return acc;
+	      }
+
+	      // Check that the total value won't exceed 21
+	      const pileValue = getPileValue(pileCards);
+	      if (pileValue + cardValue < 21) {
+	        acc.push(pileID);
+	      }
+
+	      return acc;
+	    }, /** @type {string[]} */ ([]));
+
+	    if (validOuterIds.length) {
+	      return validOuterIds;
+	    }
+	  }
+
+	  return [];
+	};
+
+	// Function to highlight 'legal' drop targets
+	const highlightValidPiles = (/** @type {string[]} */ validPiles) => {
+	  validPiles.forEach((pileId) => {
+	    const pileEl = document.getElementById(pileId);
+	    pileEl?.classList.add("pile--valid");
+	  });
+	};
+
+	// Function to clear highlighted valid piles
+	const removeHighlights = () => {
+	  const currentHighlights = Array.from(document.getElementsByClassName("pile--valid"));
+	  currentHighlights.forEach((el) => el.classList.remove("pile--valid"));
+	};
+
 	/** Drag and drop stuff */
 	const pileEls = Array.from(document.getElementsByClassName("pile"));
-	console.log("pileEls:", pileEls);
-	const drake = dragula$1(pileEls);
+	const drake = dragula$1(pileEls, {
+	  moves: function (_, source) {
+	    if (source?.classList.contains("pile--inner") || source?.classList.contains("pile--outer")) {
+	      return false;
+	    }
+	    return true;
+	  },
+	});
+	drake.on("drag", (_, source) => {
+	  // Grab a copy of the top card from the 'source' pile
+	  const card = /** @type {MO52Card[]} */ (PILES[source.id].cards).slice(0)[0];
+	  const cardValue = card.value;
+	  const validPiles = getValidPiles(cardValue);
+
+	  if (validPiles.length) {
+	    highlightValidPiles(validPiles);
+	  }
+	});
 	drake.on("drop", (_, target, source) => {
+	  removeHighlights();
 	  const fromPile = source.id;
 	  const toPile = target.id;
 	  CommandManager.doShift(fromPile, toPile);
@@ -1157,10 +1277,14 @@
 	  newGame();
 	});
 
-	// TODO: handle dropping an ace or joker
+	// TODO: Improve `getValidPiles` for royals to show "correct" placements
+	// TODO: Handle a game over scenario (in RenderCards, not Highlighter)
+	// TODO: Handle a game won scenario (in RenderCards)
+	// TODO: Handle undoing an ace or joker
 	// TODO: handle adding "armor" to royals
 	// TODO: handle lining up enough points to kill a royal
-	// TODO: Add instructions for how to play
+	// TODO: Handle a royal getting too strong (21 points IIRC)
 	// TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
+	// TODO: Add an interactive tutorial
 
 })();

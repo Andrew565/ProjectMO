@@ -3,7 +3,7 @@
 --aquamarine: #1affd5ff;
 --black: #090909ff;
 --french-gray: #b8b3beff;
---ultra-pink: #f26df9ff;
+--ultra-pink: rgb(208, 117, 213);
 }
 
 * {
@@ -18,6 +18,10 @@ body {
 
 h1 {
   color: var(--cerulean);
+}
+
+details {
+  margin-bottom: 1em;
 }
 
 .gu-mirror {
@@ -52,13 +56,21 @@ h1 {
   margin: 4px;
 }
 
+.pile--valid {
+  background-color: var(--ultra-pink);
+}
+
+.pile--horizontal .mo-card:not(:first-child) {
+  margin-left: -50px;
+}
+
 .mo-card {
   background-color: var(--french-gray);
   border: 1px solid var(--aquamarine);
   border-radius: 5px;
   height: 100px;
   width: 70px;
-  z-index: calc(-1 * var(--index));
+  z-index: var(--index);
 }
 
 .mo-card:not(:first-child) {

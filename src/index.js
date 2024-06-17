@@ -95,8 +95,14 @@ function newGame() {
   // setup a new command manager for this game
   CommandManager = createCommandManager();
 
-  // TODO: Collect all cards from all piles
-
+  // Collect all cards from all piles
+  Object.entries(PILES).forEach(([pileID, {cards}]) => {
+    if (pileID !== "e5") {
+      const pileCards = cards.splice(0);
+      moDeck.addToDrawPile(pileCards);
+    }
+  });
+  
   // Shuffle cards
   moDeck.shuffle(3);
 

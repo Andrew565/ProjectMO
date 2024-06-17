@@ -95,7 +95,7 @@ function newGame() {
   // setup a new command manager for this game
   CommandManager = createCommandManager();
 
-  // Collect all cards from all piles
+  // TODO: Collect all cards from all piles
 
   // Shuffle cards
   moDeck.shuffle(3);
@@ -204,7 +204,7 @@ function renderCards() {
   // Render the draw pile top card, too
   const topCard = moDeck.drawPile[0];
   topCard.facingDown = false;
-  let cardEl = makeFaceUpCard(topCard, 0);
+  let cardEl = makeFaceUpCard(topCard, 99);
   const pileEl = document.querySelector(`#e5.pile`);
   pileEl?.replaceChildren(cardEl);
 }

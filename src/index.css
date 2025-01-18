@@ -1,9 +1,9 @@
 :root {
   --cerulean: #007ea7ff;
---aquamarine: #1affd5ff;
---black: #090909ff;
---french-gray: #b8b3beff;
---ultra-pink: rgb(208, 117, 213);
+  --aquamarine: #1affd5ff;
+  --black: #090909ff;
+  --french-gray: #b8b3beff;
+  --ultra-pink: rgb(208, 117, 213);
 }
 
 * {
@@ -54,6 +54,7 @@ details {
   justify-content: center;
   align-items: center;
   margin: 4px;
+  min-height: 108px;
 }
 
 .pile--valid {
@@ -66,7 +67,7 @@ details {
 
 .mo-card {
   background-color: var(--french-gray);
-  border: 1px solid var(--aquamarine);
+  border: 1px solid var(--black);
   border-radius: 5px;
   height: 100px;
   width: 70px;
@@ -80,8 +81,6 @@ details {
 .mo-card.mo-card--empty {
   background-color: transparent;
   border: 0;
-  height: 110px;
-  width: 78px;
 }
 
 .mo-card.mo-card--empty:not(:only-child) {

@@ -58,7 +58,7 @@ const InnerPileIds = ["b2", "c2", "d2", "b3", "c3", "d3", "b4", "c4", "d4"];
 
 // Initialize Piles
 /** @type Piles */
-const PILES = {
+let PILES = {
   a2: { cards: [] },
   a3: { cards: [] },
   a4: { cards: [] },
@@ -128,19 +128,21 @@ function dealOutInitialCards() {
 
   while (!allPilesDealt) {
     const card = moDeck.drawFromDrawPile(1)[0];
+    card.facingDown = false;
 
     // If Royal, set aside
     if (isRoyal(card)) {
+      card.facingDown = true;
       royals.push(card);
     } else {
       // Else, deal to an empty center pile that isn't c3
       const currentPile = innerPilesList.shift();
       // Skip the center pile
       if (currentPile && currentPile !== "c3") {
-        card.facingDown = false;
         PILES[currentPile].cards.push(card);
       }
     }
+
     if (innerPilesList.length === 0) {
       allPilesDealt = true;
     }
@@ -148,7 +150,10 @@ function dealOutInitialCards() {
 
   // Add Royals (if any) back to top of draw pile
   moDeck.addToTopOfDrawPile(royals);
+  // Flip over top draw pile card
+  moDeck.drawPile[0].facingDown = false;
 }
+
 function setElInnerHTML(cardEl, selector, value) {
   const selectedEl = cardEl.querySelector(selector);
   if (selectedEl) selectedEl.innerHTML = value;
@@ -196,17 +201,22 @@ function renderCards() {
   Object.entries(PILES).forEach(([pileName, { cards }]) => {
     const cardsClone = Array.from(cards);
 
-    // For each pile, render out cards in reverse order, so that [0] ends up with the highest index (but only for inner piles)
+    // For each inner pile, render out cards in reverse order, so that [0] ends up with the highest index
     if (InnerPileIds.includes(pileName)) cardsClone.reverse();
 
+    // Make card elements
     const cardEls = cardsClone.map((card, index) => {
       if (card.facingDown) {
         return makeFaceDownCard(index);
       } else {
+        // Set the index to 99 for the top card of draw pile
+        if (pileName === "e5") index = 99;
+
         return makeFaceUpCard(card, index);
       }
     });
 
+    // Add an empty card to the bottom of the pile (makes drag n drop easier)
     const nextIndex = cardEls.length;
     const emptyCard = makeEmptyCard(nextIndex);
     cardEls.push(emptyCard);
@@ -215,13 +225,6 @@ function renderCards() {
     const pileEl = document.querySelector(`#${pileName}.pile`);
     pileEl?.replaceChildren(...cardEls);
   });
-
-  // Render the draw pile top card, too
-  const topCard = moDeck.drawPile[0];
-  topCard.facingDown = false;
-  let cardEl = makeFaceUpCard(topCard, 99);
-  const pileEl = document.querySelector(`#e5.pile`);
-  pileEl?.replaceChildren(cardEl);
 }
 
 /**
@@ -245,14 +248,11 @@ function shiftCards(fromPile, toPile) {
 
     PILES[toPile].cards.unshift(topCard);
   }
-
-  // re-render cards
-  renderCards();
 }
 
 // Function to create commandManagers, should be one per game to manage history (undo/redo)
 const createCommandManager = () => {
-  /** @type {{fromPile: string, toPile: string}[]} */
+  /** @type {{prevPile: Piles, nextPile: Piles}[]} */
   // @ts-ignore
   let history = [null];
   let position = 0;
@@ -268,43 +268,73 @@ const createCommandManager = () => {
         history = history.slice(0, position + 1);
       }
 
-      history.push({ fromPile, toPile });
-      position += 1;
+      // Make a clone of the state before shifting
+      const prevPile = structuredClone(PILES);
+
+      // Do the shift
       shiftCards(fromPile, toPile);
+
+      // Make a clone of the state after shifting
+      const nextPile = structuredClone(PILES);
+
+      // Save the states to history
+      history.push({ prevPile, nextPile });
+      position += 1;
+
+      // Finally, do a render
+      renderCards();
     },
 
     undo() {
+      // Check if at beginning of history (no undo state to undo to)
       if (position > 0) {
-        const { fromPile, toPile } = history[position];
+        // Get the previous history
+        const { prevPile } = history[position];
+
+        // Shift the history position back one
         position -= 1;
-        shiftCards(toPile, fromPile);
+
+        // Replace the current PILES with the previous state
+        PILES = prevPile;
       }
+
+      // Finally, do a render
+      renderCards();
     },
 
     redo() {
+      // Check if at end of history (no redo state to redo to)
       if (position < history.length - 1) {
+        // Increase the history position by one
         position += 1;
-        const { fromPile, toPile } = history[position];
-        shiftCards(fromPile, toPile);
+
+        // Get the prior state
+        const { nextPile } = history[position];
+
+        // Replace the current state with the next one
+        PILES = nextPile;
       }
+
+      // Finally, do a render
+      renderCards();
     },
   };
 };
 
 // Counts up value of pile's cards, used for royal piles
-const getPileValue = (/** @type {MO52Card[]} */ pileCards) => {
+function getPileValue(/** @type {MO52Card[]} */ pileCards) {
   return pileCards.reduce((acc, card) => {
     return (acc += card.value);
   }, 0);
-};
+}
 
 // Checks if a royal card is present and face-down
-const checkIfRoyalDefeated = (/** @type {MO52Card[]} */ pileCards) => {
+function checkIfRoyalDefeated(/** @type {MO52Card[]} */ pileCards) {
   return pileCards.some((card) => isRoyal(card) && card.facingDown);
-};
+}
 
 // Function to determine which piles are 'legal' targets for drag and drop
-const getValidPiles = (/** @type {MO52Card} */ card) => {
+function getValidPiles(/** @type {MO52Card} */ card) {
   let validInnerIds;
   // If a Royal, skip the inner IDs
   if (!isRoyal(card)) {
@@ -323,7 +353,7 @@ const getValidPiles = (/** @type {MO52Card} */ card) => {
       }
 
       return acc;
-    }, /** @type {string[]} */ ([]));
+    }, /** @type {string[]} */([]));
   }
 
   if (validInnerIds) {
@@ -350,7 +380,7 @@ const getValidPiles = (/** @type {MO52Card} */ card) => {
       }
 
       return acc;
-    }, /** @type {string[]} */ ([]));
+    }, /** @type {string[]} */([]));
 
     if (validOuterIds.length) {
       return validOuterIds;
@@ -358,21 +388,21 @@ const getValidPiles = (/** @type {MO52Card} */ card) => {
   }
 
   return [];
-};
+}
 
 // Function to highlight 'legal' drop targets
-const highlightValidPiles = (/** @type {string[]} */ validPiles) => {
+function highlightValidPiles(/** @type {string[]} */ validPiles) {
   validPiles.forEach((pileId) => {
     const pileEl = document.getElementById(pileId);
     pileEl?.classList.add("pile--valid");
   });
-};
+}
 
 // Function to clear highlighted valid piles
-const removeHighlights = () => {
+function removeHighlights() {
   const currentHighlights = Array.from(document.getElementsByClassName("pile--valid"));
   currentHighlights.forEach((el) => el.classList.remove("pile--valid"));
-};
+}
 
 /** Drag and drop stuff */
 const pileEls = Array.from(document.getElementsByClassName("pile"));
@@ -386,7 +416,7 @@ const drake = dragula(pileEls, {
 });
 drake.on("drag", (_, source) => {
   // Grab a copy of the top card from the 'source' pile
-  const card = /** @type {MO52Card[]} */ (PILES[source.id].cards).slice(0)[0];
+  const card = /** @type {MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
   const validPiles = getValidPiles(card);
 
   if (validPiles.length) {
@@ -397,17 +427,6 @@ drake.on("drop", (_, target, source) => {
   removeHighlights();
   const fromPile = source.id;
   const toPile = target.id;
-
-  // Grab a copy of the top card from the 'source' pile
-  const card = /** @type {MO52Card[]} */ (PILES[source.id].cards).slice(0)[0];
-  const validPiles = getValidPiles(card);
-
-  // FIXME: Prevent drop if invalid placement
-  // .cancel() doesn't actually work, need to translate "getValidPiles" into a "dragula accepts" prop
-  if (!validPiles.includes(toPile)) {
-    drake.cancel();
-    return;
-  }
 
   CommandManager.doShift(fromPile, toPile);
 });

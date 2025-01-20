@@ -200,32 +200,32 @@ FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that ta
 
 ## `getValidPiles(card)`
 
-1. Init an undefined `validInnerIds`
-2. If `isRoyal(card)` skip checking this pile and return
-   1. Get `validInnerIds` via `InnerPileIds.reduce((acc, pileId))`:
+1. Init an undefined `validOuterIds`
+2. If `isRoyal(card)`:
+   1. Get `validOuterIds` via `getValidOuterPiles(card)`
+   2. Return `validOuterIds` if any, else `[]`
+3. Return `getValidInnerPiles(card)`
+
+## `getValidOuterPiles(card)`
+
+1. Return `OuterPileIds.reduce(acc, pileId)`:
+   1. Get `pileCards` via `(PILES[pileId].cards).slice(0)`
+   2. If no `pileCards` push `pileId` onto `acc`
+   3. If `checkIfRoyalDefeated(pileCards)` return acc
+   4. Get `pileValue` via `getPileValue(pileCards)`
+   5. If `pileValue + card.value < 21` (valid up to 21 points):
+      1. Push `pileId` onto `acc`
+   6. Return `acc`
+
+## `getValidInnerPiles(card)`
+
+1. Return `InnerPiles.reduce(acc, pileId)`:
+   1. If `card` is an Ace or Joker, push `pileId` onto `acc`
+   2. Else:
       1. Get `topPileCard` from `PILES[pileId].cards`
-      2. If `card` is an Ace or Joker:
-         1. Push `pileId` onto `acc` (i.e. add it to the list of `validInnerIds`)
-      3. If `topPileCard` exists and it's value is <= `card.value`, OR if no `topPileCard`:
+      2. If `topPileCard` found and `topPileCard.value <= card.value`:
          1. Push `pileId` onto `acc`
-3. If one or more `validInnerIds`:
-   1. return `validInnerIds`
-4. Else:
-   1. Get `validOuterIds` via `OuterPileIds.reduce((acc, pileId))`:
-      1. Get `pileCards` from `PILES[pileId].cards`
-      2. If no `pileCards`:
-         1. Push `pileId` onto `acc`
-      3. Get `defeatedRoyal` via `checkIfRoyalDefeated(pileCards)`
-      4. If `defeatedRoyal`:
-         1. Return `acc` early
-      5. Get `pileValue` via `getPileValue(pileCards)`
-      6. If `pileValue` plus `card.value` is less than 21:
-         1. Push `pileId` onto `acc`
-            1. TODO: Rules say if a royal pile's value is 21 or more you automatically lose, need to add a check for this as part of `drake.drop` or a game loop tick
-      7. Return `acc`
-   2. If one or more `validOuterIds`:
-      1. Return `validOuterIds`
-5. At this point there should be no valid inner or outer ids, so return an empty array
+   3. Return `acc`
 
 ## `highlightValidPiles(validPiles)`
 
@@ -242,13 +242,12 @@ FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that ta
 
 Roughly in order of priority.
 
-1. FIXME: Instead of `fromPile` and `toPile` strings, `history` should be storing the current and future states of the `PILES` object, which would make undoing aces and jokers feasible. Suggest creation of `replacePILES` function
-2. TODO: Prevent dropping on invalid places using `accepts` (see above FIXME)
-3. TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
-4. TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
-5. TODO: Handle a game won scenario (in `renderCards` or event tick?)
-6. TODO: Handle a royal getting too strong (21 points or more, see above)
-7.  TODO: Improve `getValidPiles` for royals to show "specific" placements (i.e. if a Heart, show highest heart, then diamonds if no hearts, then highest black card)
-8.  TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
-9.  TODO: Add a more "interactive" tutorial
-10. FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that takes an `empty?` prop to choose the template?
+- TODO: Prevent dropping on invalid places using `accepts` (see above FIXME)
+- TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
+- TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
+- TODO: Handle a game won scenario (in `renderCards` or event tick?)
+- TODO: Handle a royal getting too strong (21 points or more, see above)
+- TODO: Improve `getValidPiles` for royals to show "specific" placements (i.e. if a Heart, show highest heart, then diamonds if no hearts, then highest black card)
+- TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
+- TODO: Add a more "interactive" tutorial
+- FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that takes an `empty?` prop to choose the template?

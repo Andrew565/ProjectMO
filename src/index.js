@@ -335,59 +335,66 @@ function checkIfRoyalDefeated(/** @type {MO52Card[]} */ pileCards) {
 
 // Function to determine which piles are 'legal' targets for drag and drop
 function getValidPiles(/** @type {MO52Card} */ card) {
-  let validInnerIds;
+  let validOuterIds;
+
   // If a Royal, skip the inner IDs
-  if (!isRoyal(card)) {
-    validInnerIds = InnerPileIds.reduce((acc, pileId) => {
+  if (isRoyal(card)) {
+    validOuterIds = getValidOuterPiles(card);
+    return validOuterIds.length ? validOuterIds : [];
+  }
+
+  return getValidInnerPiles(card);
+}
+
+/**
+ * Function to check which outer piles might be valid for a given card
+ * @param {MO52Card} card
+ */
+function getValidOuterPiles(card) {
+  return OuterPileIds.reduce((acc, pileId) => {
+    const pileCards = /** @type {MO52Card[]} */ (PILES[pileId].cards).slice(0);
+
+    // Check if empty
+    if (!pileCards) {
+      acc.push(pileId);
+    }
+
+    // If there's a royal, check that the royal hasn't already been defeated
+    if (checkIfRoyalDefeated(pileCards)) {
+      return acc;
+    }
+
+    // Check that the total value won't exceed 21
+    const pileValue = getPileValue(pileCards);
+    if (pileValue + card.value < 21) {
+      acc.push(pileId);
+    }
+
+    return acc;
+  }, /** @type {string[]} */ ([]));
+}
+
+/**
+ * Function to check which inner piles might be valid for a given card
+ * @param {MO52Card} card
+ */
+function getValidInnerPiles(card) {
+  return InnerPileIds.reduce((acc, pileId) => {
+    // If an Ace or Joker, add the pileId and return early
+    if (card.value <= 1) {
+      acc.push(pileId);
+    } else {
       // Get top card, if any
       const topPileCard = /** @type {MO52Card[]} */ (PILES[pileId].cards).slice(0)[0];
-
-      // If an Ace or Joker, add the pileId
-      if (card.value <= 1) {
-        acc.push(pileId);
-      }
 
       // Check if topPileCard is same or lower value, or if pile is empty
       if ((topPileCard && topPileCard.value <= card.value) || !topPileCard) {
         acc.push(pileId);
       }
-
-      return acc;
-    }, /** @type {string[]} */([]));
-  }
-
-  if (validInnerIds) {
-    return validInnerIds;
-  } else {
-    const validOuterIds = OuterPileIds.reduce((acc, pileId) => {
-      const pileCards = /** @type {MO52Card[]} */ (PILES[pileId].cards).slice(0);
-
-      // Check if empty
-      if (!pileCards) {
-        acc.push(pileId);
-      }
-
-      // If there's a royal, check that the royal hasn't already been defeated
-      const defeatedRoyal = checkIfRoyalDefeated(pileCards);
-      if (defeatedRoyal) {
-        return acc;
-      }
-
-      // Check that the total value won't exceed 21
-      const pileValue = getPileValue(pileCards);
-      if (pileValue + card.value < 21) {
-        acc.push(pileId);
-      }
-
-      return acc;
-    }, /** @type {string[]} */([]));
-
-    if (validOuterIds.length) {
-      return validOuterIds;
     }
-  }
 
-  return [];
+    return acc;
+  }, /** @type {string[]} */ ([]));
 }
 
 // Function to highlight 'legal' drop targets

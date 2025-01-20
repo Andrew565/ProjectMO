@@ -152,12 +152,11 @@ FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that ta
       2. Push `cards` onto `PILES.e5.cards`
    2. If there are more cards in `fromPile`, set the top one to `facingDown = false`
    3. Add `topCard` to top of `toPile`
-3. Call `renderCards`
 
 ## `createCommandManager()`
 
-1. Init `history` as an array of `{fromPile, toPile}` objects
-   1. FIXME: Instead of `fromPile` and `toPile` strings, `history` should be storing the current and future states of the `PILES` object, which would make undoing aces and jokers feasible.
+1. Init `history` as an array of `{prevPile, nextPile}` objects
+   1. NOTE: see below, uses structuredClone to clone the PILES object
 2. Init `position` as `0` (history position)
 3. Return an object with `doShift`, `undo`, and `redo` functions (see below)
 
@@ -165,26 +164,28 @@ FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that ta
 
 1. if `position` is not at the end of `history` (aka `history.length - 1`):
    1. Slice `history` so as to only keep what is at the current `position` or older
-2. Push onto `history` the current `fromPile` and `toPile`
-   1. NOTE: See above `createCommandManager` note about changing what's stored in `history` so that it uses `PILES` state
-3. Increment `position` by 1
-4. Call `shiftCards(fromPile, toPile)`
+2. Get `prevPile` by cloning `PILES`
+3. Call `shiftCards(fromPile, toPile)`
+4. Get `nextPile` by cloning `PILES`
+5. Push onto `history` the `{prevPile, nextPile}` object
+6. Increment `position` by 1
+7. Call `renderCards`
 
 ## `CommandManager.undo()`
 
 1. If `position > 0` (i.e. not at the start of `history`):
-   1. Get `fromPile` and `toPile` from current `history[position]`
+   1. Get `prevPile` from current `history[position]`
    2. Decrement `position` by 1
-   3. Call `shiftCards(toPile, fromPile)`
-      1. NOTE: Note the reverse variable positions. When we change `history` to store `PILES` states, we will need to replace `shiftCards` with a different function which will `replacePILES` or something like that
+   3. Replace `PILES = prevPile`
+2. Call `renderCards()`
 
 ## `CommandManager.redo()`
 
 1. If `position < history.length -1` (i.e. not at the end):
    1. Increment `position` by 1
-   2. Get `fromPile` and `toPile` from current `history[position]`
-   3. Call `shiftCards(fromPile, toPile)`
-      1. NOTE: See above `undo()` note about using `PILES` state instead of "from and to" strings
+   2. Get `nextPile` from current `history[position]`
+   3. Replace `PILES = nextPile`
+2. Call `renderCards()`
 
 ## `getPileValue(pileCards)`
 

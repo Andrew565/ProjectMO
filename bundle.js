@@ -1004,6 +1004,7 @@
 	  renderCards();
 	}
 
+	// Setup button event listeners
 	document.getElementById("newGameButton")?.addEventListener("click", () => newGame());
 	document.getElementById("undoButton")?.addEventListener("click", () => CommandManager.undo());
 	document.getElementById("redoButton")?.addEventListener("click", () => CommandManager.redo());

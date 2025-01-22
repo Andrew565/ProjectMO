@@ -398,6 +398,19 @@ function getValidInnerPiles(card) {
   }, /** @type {string[]} */ ([]));
 }
 
+/**
+ * Checks if the toPile is a valid location for the top card of the fromPile
+ * @param {string} fromPile
+ * @param {string} toPile
+ * @returns {boolean}
+ */
+function isValidPile(fromPile, toPile) {
+  const card = PILES[fromPile].cards.slice(0)[0];
+  const validPiles = getValidPiles(card);
+  const retVal = validPiles.includes(toPile);
+  return retVal;
+}
+
 // Function to highlight 'legal' drop targets
 function highlightValidPiles(/** @type {string[]} */ validPiles) {
   validPiles.forEach((pileId) => {
@@ -420,6 +433,12 @@ const drake = dragula(pileEls, {
       return false;
     }
     return true;
+  },
+  accepts: function (_, toPileEl, fromPileEl) {
+    const fromPile = fromPileEl?.id;
+    const toPile = toPileEl?.id;
+    if (fromPile && toPile) return isValidPile(fromPile, toPile);
+    return false;
   },
 });
 drake.on("drag", (_, source) => {

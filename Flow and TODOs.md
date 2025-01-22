@@ -119,8 +119,6 @@
 3. Set the `index` variable on the el
 4. Return the `emptyCard`
 
-FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that takes an `empty?` prop to choose the template?
-
 ## `renderCards()`
 
 1. `Object.entries(PILES).forEach`:
@@ -243,7 +241,6 @@ FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that ta
 
 Roughly in order of priority.
 
-- TODO: Prevent dropping on invalid places using `accepts` (see above FIXME)
 - TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
 - TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
 - TODO: Handle a game won scenario (in `renderCards` or event tick?)

@@ -61,6 +61,11 @@ details {
   background-color: var(--ultra-pink);
 }
 
+.pile--drawpile {
+  background-color: var(--ultra-pink);
+  border: 2px solid var(--cerulean);
+}
+
 .pile--horizontal .mo-card:not(:first-child) {
   margin-left: -50px;
 }
@@ -93,6 +98,7 @@ details {
 
 .mo-card .mo-card__corner {
   padding: 0.25em;
+  font-size: larger;
 }
 
 .mo-card .mo-card__rank {

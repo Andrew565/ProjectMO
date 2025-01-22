@@ -241,11 +241,10 @@
 
 Roughly in order of priority.
 
+- TODO: Improve `getValidPiles` for royals to show "specific" placements (i.e. if a Heart, show highest heart, then diamonds if no hearts, then highest black card)
 - TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
 - TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
 - TODO: Handle a game won scenario (in `renderCards` or event tick?)
 - TODO: Handle a royal getting too strong (21 points or more, see above)
-- TODO: Improve `getValidPiles` for royals to show "specific" placements (i.e. if a Heart, show highest heart, then diamonds if no hearts, then highest black card)
 - TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
 - TODO: Add a more "interactive" tutorial
-- FIXME: refactor `makeFaceDownCard` and `makeEmptyCard` into one function that takes an `empty?` prop to choose the template?

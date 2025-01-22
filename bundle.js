@@ -975,6 +975,19 @@
 	function replacePiles(newPiles) {
 	  PILES = newPiles;
 	}
+
+	function collectAndShuffleCards() {
+	  Object.entries(PILES).forEach(([pileId, { cards }]) => {
+	    if (pileId !== "e5") {
+	      const pileCards = cards.splice(0);
+	      moDeck.addToDrawPile(pileCards);
+	    }
+	  });
+
+	  // Shuffle cards
+	  moDeck.shuffle(3);
+	}
+
 	function dealOutInitialCards() {
 	  let allPilesDealt = false;
 	  let royals = [];
@@ -1287,15 +1300,7 @@
 	  CommandManager = createCommandManager();
 
 	  // Collect all cards from all piles
-	  Object.entries(PILES).forEach(([pileId, { cards }]) => {
-	    if (pileId !== "e5") {
-	      const pileCards = cards.splice(0);
-	      moDeck.addToDrawPile(pileCards);
-	    }
-	  });
-
-	  // Shuffle cards
-	  moDeck.shuffle(3);
+	  collectAndShuffleCards();
 
 	  // Deal cards out to central piles
 	  dealOutInitialCards();
@@ -1343,7 +1348,7 @@
 	});
 
 	drake.on("drag", function (_, source) {
-	  // Grab a copy of the top card from the 'source' pile
+	  // Grab a copy of the top card from the source pile
 	  const card = /** @type {import("./Initializers").MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
 	  const validPiles = getValidPiles(card);
 

@@ -87,6 +87,19 @@ export let PILES = {
 export function replacePiles(newPiles) {
   PILES = newPiles;
 }
+
+export function collectAndShuffleCards() {
+  Object.entries(PILES).forEach(([pileId, { cards }]) => {
+    if (pileId !== "e5") {
+      const pileCards = cards.splice(0);
+      moDeck.addToDrawPile(pileCards);
+    }
+  });
+
+  // Shuffle cards
+  moDeck.shuffle(3);
+}
+
 export function dealOutInitialCards() {
   let allPilesDealt = false;
   let royals = [];

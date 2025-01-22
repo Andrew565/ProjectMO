@@ -1,5 +1,5 @@
 import dragula from "dragula";
-import { dealOutInitialCards, moDeck, PILES } from "./Initializers";
+import { collectAndShuffleCards, dealOutInitialCards, PILES } from "./Initializers";
 import { createCommandManager } from "./CommandManager";
 import { renderCards } from "./Renderers";
 import { isValidPile, getValidPiles } from "./Validators";
@@ -13,15 +13,7 @@ function newGame() {
   CommandManager = createCommandManager();
 
   // Collect all cards from all piles
-  Object.entries(PILES).forEach(([pileId, { cards }]) => {
-    if (pileId !== "e5") {
-      const pileCards = cards.splice(0);
-      moDeck.addToDrawPile(pileCards);
-    }
-  });
-
-  // Shuffle cards
-  moDeck.shuffle(3);
+  collectAndShuffleCards();
 
   // Deal cards out to central piles
   dealOutInitialCards();
@@ -69,7 +61,7 @@ const drake = dragula(pileEls, {
 });
 
 drake.on("drag", function (_, source) {
-  // Grab a copy of the top card from the 'source' pile
+  // Grab a copy of the top card from the source pile
   const card = /** @type {import("./Initializers").MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
   const validPiles = getValidPiles(card);
 

@@ -1,8 +1,6 @@
 (function () {
 	'use strict';
 
-	var n=[{numberRank:0,nameRank:"Two",initial:"2",suit:"Clubs",name:"Two of Clubs"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Clubs",name:"Three of Clubs"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Clubs",name:"Four of Clubs"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Clubs",name:"Five of Clubs"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Clubs",name:"Six of Clubs"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Clubs",name:"Seven of Clubs"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Clubs",name:"Eight of Clubs"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Clubs",name:"Nine of Clubs"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Clubs",name:"Ten of Clubs"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Clubs",name:"Jack of Clubs"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Clubs",name:"Queen of Clubs"},{numberRank:11,nameRank:"King",initial:"K",suit:"Clubs",name:"King of Clubs"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Clubs",name:"Ace of Clubs"},{numberRank:0,nameRank:"Two",initial:"2",suit:"Hearts",name:"Two of Hearts"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Hearts",name:"Three of Hearts"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Hearts",name:"Four of Hearts"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Hearts",name:"Five of Hearts"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Hearts",name:"Six of Hearts"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Hearts",name:"Seven of Hearts"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Hearts",name:"Eight of Hearts"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Hearts",name:"Nine of Hearts"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Hearts",name:"Ten of Hearts"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Hearts",name:"Jack of Hearts"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Hearts",name:"Queen of Hearts"},{numberRank:11,nameRank:"King",initial:"K",suit:"Hearts",name:"King of Hearts"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Hearts",name:"Ace of Hearts"},{numberRank:0,nameRank:"Two",initial:"2",suit:"Spades",name:"Two of Spades"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Spades",name:"Three of Spades"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Spades",name:"Four of Spades"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Spades",name:"Five of Spades"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Spades",name:"Six of Spades"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Spades",name:"Seven of Spades"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Spades",name:"Eight of Spades"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Spades",name:"Nine of Spades"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Spades",name:"Ten of Spades"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Spades",name:"Jack of Spades"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Spades",name:"Queen of Spades"},{numberRank:11,nameRank:"King",initial:"K",suit:"Spades",name:"King of Spades"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Spades",name:"Ace of Spades"},{numberRank:0,nameRank:"Two",initial:"2",suit:"Diamonds",name:"Two of Diamonds"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Diamonds",name:"Three of Diamonds"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Diamonds",name:"Four of Diamonds"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Diamonds",name:"Five of Diamonds"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Diamonds",name:"Six of Diamonds"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Diamonds",name:"Seven of Diamonds"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Diamonds",name:"Eight of Diamonds"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Diamonds",name:"Nine of Diamonds"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Diamonds",name:"Ten of Diamonds"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Diamonds",name:"Jack of Diamonds"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Diamonds",name:"Queen of Diamonds"},{numberRank:11,nameRank:"King",initial:"K",suit:"Diamonds",name:"King of Diamonds"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Diamonds",name:"Ace of Diamonds"}],m={numberRank:99,nameRank:"Joker",initial:"JO",suit:"Joker",name:"Joker (Plain)"},r={numberRank:99,nameRank:"Joker",initial:"JO",suit:"Joker",name:"Joker (Fancy)"},d=[...n,m,r],R={FancyJoker:r,PlainJoker:m,standard52DeckOfCards:n,standard52DeckOfCardsWithJokers:d};var e=class{drawPile;discardPile;constructor(a){this.drawPile=a,this.discardPile=[],this.shuffle(7);}shuffle(a){for(var u=this.drawPile.length,i=0;i<a;i++)for(let s of this.drawPile){let o=this.drawPile.indexOf(s),t=Math.floor(Math.random()*u);this.drawPile[o]=this.drawPile[t],this.drawPile[t]=s;}}addToBottomOfDiscardPile(a){this.discardPile.push(...a);}addToDiscardPile(a){this.addToTopOfDiscardPile(a);}addToTopOfDiscardPile(a){this.discardPile.unshift(...a);}drawFromDiscardPile(a){return this.discardPile.splice(0,a)}addToBottomOfDrawPile(a){this.drawPile.push(...a);}addToDrawPile(a){this.addToBottomOfDrawPile(a);}addToTopOfDrawPile(a){this.drawPile.unshift(...a);}drawFromDrawPile(a){return this.drawPile.splice(0,a)}};new e(n);
-
 	var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 	function getDefaultExportFromCjs (x) {
@@ -888,6 +886,8 @@
 
 	var dragula$1 = /*@__PURE__*/getDefaultExportFromCjs(dragula_1);
 
+	var n=[{numberRank:0,nameRank:"Two",initial:"2",suit:"Clubs",name:"Two of Clubs"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Clubs",name:"Three of Clubs"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Clubs",name:"Four of Clubs"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Clubs",name:"Five of Clubs"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Clubs",name:"Six of Clubs"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Clubs",name:"Seven of Clubs"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Clubs",name:"Eight of Clubs"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Clubs",name:"Nine of Clubs"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Clubs",name:"Ten of Clubs"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Clubs",name:"Jack of Clubs"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Clubs",name:"Queen of Clubs"},{numberRank:11,nameRank:"King",initial:"K",suit:"Clubs",name:"King of Clubs"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Clubs",name:"Ace of Clubs"},{numberRank:0,nameRank:"Two",initial:"2",suit:"Hearts",name:"Two of Hearts"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Hearts",name:"Three of Hearts"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Hearts",name:"Four of Hearts"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Hearts",name:"Five of Hearts"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Hearts",name:"Six of Hearts"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Hearts",name:"Seven of Hearts"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Hearts",name:"Eight of Hearts"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Hearts",name:"Nine of Hearts"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Hearts",name:"Ten of Hearts"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Hearts",name:"Jack of Hearts"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Hearts",name:"Queen of Hearts"},{numberRank:11,nameRank:"King",initial:"K",suit:"Hearts",name:"King of Hearts"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Hearts",name:"Ace of Hearts"},{numberRank:0,nameRank:"Two",initial:"2",suit:"Spades",name:"Two of Spades"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Spades",name:"Three of Spades"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Spades",name:"Four of Spades"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Spades",name:"Five of Spades"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Spades",name:"Six of Spades"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Spades",name:"Seven of Spades"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Spades",name:"Eight of Spades"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Spades",name:"Nine of Spades"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Spades",name:"Ten of Spades"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Spades",name:"Jack of Spades"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Spades",name:"Queen of Spades"},{numberRank:11,nameRank:"King",initial:"K",suit:"Spades",name:"King of Spades"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Spades",name:"Ace of Spades"},{numberRank:0,nameRank:"Two",initial:"2",suit:"Diamonds",name:"Two of Diamonds"},{numberRank:1,nameRank:"Three",initial:"3",suit:"Diamonds",name:"Three of Diamonds"},{numberRank:2,nameRank:"Four",initial:"4",suit:"Diamonds",name:"Four of Diamonds"},{numberRank:3,nameRank:"Five",initial:"5",suit:"Diamonds",name:"Five of Diamonds"},{numberRank:4,nameRank:"Six",initial:"6",suit:"Diamonds",name:"Six of Diamonds"},{numberRank:5,nameRank:"Seven",initial:"7",suit:"Diamonds",name:"Seven of Diamonds"},{numberRank:6,nameRank:"Eight",initial:"8",suit:"Diamonds",name:"Eight of Diamonds"},{numberRank:7,nameRank:"Nine",initial:"9",suit:"Diamonds",name:"Nine of Diamonds"},{numberRank:8,nameRank:"Ten",initial:"10",suit:"Diamonds",name:"Ten of Diamonds"},{numberRank:9,nameRank:"Jack",initial:"J",suit:"Diamonds",name:"Jack of Diamonds"},{numberRank:10,nameRank:"Queen",initial:"Q",suit:"Diamonds",name:"Queen of Diamonds"},{numberRank:11,nameRank:"King",initial:"K",suit:"Diamonds",name:"King of Diamonds"},{numberRank:12,nameRank:"Ace",initial:"A",suit:"Diamonds",name:"Ace of Diamonds"}],m={numberRank:99,nameRank:"Joker",initial:"JO",suit:"Joker",name:"Joker (Plain)"},r={numberRank:99,nameRank:"Joker",initial:"JO",suit:"Joker",name:"Joker (Fancy)"},d=[...n,m,r],R={FancyJoker:r,PlainJoker:m,standard52DeckOfCards:n,standard52DeckOfCardsWithJokers:d};var e=class{drawPile;discardPile;constructor(a){this.drawPile=a,this.discardPile=[],this.shuffle(7);}shuffle(a){for(var u=this.drawPile.length,i=0;i<a;i++)for(let s of this.drawPile){let o=this.drawPile.indexOf(s),t=Math.floor(Math.random()*u);this.drawPile[o]=this.drawPile[t],this.drawPile[t]=s;}}addToBottomOfDiscardPile(a){this.discardPile.push(...a);}addToDiscardPile(a){this.addToTopOfDiscardPile(a);}addToTopOfDiscardPile(a){this.discardPile.unshift(...a);}drawFromDiscardPile(a){return this.discardPile.splice(0,a)}addToBottomOfDrawPile(a){this.drawPile.push(...a);}addToDrawPile(a){this.addToBottomOfDrawPile(a);}addToTopOfDrawPile(a){this.drawPile.unshift(...a);}drawFromDrawPile(a){return this.drawPile.splice(0,a)}};new e(n);
+
 	/**
 	 * @typedef {Object} MO52Card
 	 * @prop {number} numberRank
@@ -898,6 +898,7 @@
 	 * @prop {number} value
 	 * @prop {boolean} facingDown
 	 */
+
 	/**
 	 * @typedef {{[x: string]: {cards: MO52Card[]}}} Piles
 	 */
@@ -911,7 +912,7 @@
 	};
 
 	// Initialize Cards
-	const BaseCards = /** @type {MO52Card[]} */ (R.standard52DeckOfCards).map((card) => {
+	const BaseCards = /** @type MO52Card[] */ (R.standard52DeckOfCards).map((card) => {
 	  // Adjust value for zero-based numberRank
 	  if (card.nameRank !== "Ace") {
 	    card.value = card.numberRank + 2;
@@ -934,17 +935,18 @@
 
 	  return card;
 	});
+
 	// Add a Joker with value of 0
 	BaseCards.push({ ...R.FancyJoker, initial: "0", value: 0, facingDown: true, suit: suitIcons["J"] });
+
 	// Initialize Deck
-	const moDeck = new e(BaseCards);
+	const moDeck = new e(BaseCards); // Pile Ids for inner and outer piles, used for iterating over piles
 
-	// Initialize Pile IDs
-	const OuterPileIds = ["b1", "c1", "d1", "a2", "e2", "a3", "e3", "a4", "e4", "b5", "c5", "d5"];
 	const InnerPileIds = ["b2", "c2", "d2", "b3", "c3", "d3", "b4", "c4", "d4"];
-
+	const OuterPileIds = ["b1", "c1", "d1", "a2", "e2", "a3", "e3", "a4", "e4", "b5", "c5", "d5"];
 	// Initialize Piles
 	/** @type Piles */
+
 	let PILES = {
 	  a2: { cards: [] },
 	  a3: { cards: [] },
@@ -970,45 +972,9 @@
 	  e5: { cards: moDeck.drawPile },
 	};
 
-	// Get card templates for later
-	const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
-	const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceDownCardTemplate"));
-	const emptyTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("emptyCardTemplate"));
-
-	/** @param {MO52Card} card */
-	function isRoyal(card) {
-	  return card.value > 10;
+	function replacePiles(newPiles) {
+	  PILES = newPiles;
 	}
-
-	let CommandManager;
-
-	function newGame() {
-	  // setup a new command manager for this game
-	  CommandManager = createCommandManager();
-
-	  // Collect all cards from all piles
-	  Object.entries(PILES).forEach(([pileId, { cards }]) => {
-	    if (pileId !== "e5") {
-	      const pileCards = cards.splice(0);
-	      moDeck.addToDrawPile(pileCards);
-	    }
-	  });
-
-	  // Shuffle cards
-	  moDeck.shuffle(3);
-
-	  // Deal cards out to central piles
-	  dealOutInitialCards();
-
-	  // Lastly, render the current state of the piles
-	  renderCards();
-	}
-
-	// Setup button event listeners
-	document.getElementById("newGameButton")?.addEventListener("click", () => newGame());
-	document.getElementById("undoButton")?.addEventListener("click", () => CommandManager.undo());
-	document.getElementById("redoButton")?.addEventListener("click", () => CommandManager.redo());
-
 	function dealOutInitialCards() {
 	  let allPilesDealt = false;
 	  let royals = [];
@@ -1040,15 +1006,20 @@
 	  moDeck.addToTopOfDrawPile(royals);
 	  // Flip over top draw pile card
 	  moDeck.drawPile[0].facingDown = false;
+	} /** @param {import("./Initializers").MO52Card} card */
+
+	// Needed here to prevent circular dependency
+	function isRoyal(card) {
+	  return card.value > 10;
 	}
 
-	function setElInnerHTML(cardEl, selector, value) {
-	  const selectedEl = cardEl.querySelector(selector);
-	  if (selectedEl) selectedEl.innerHTML = value;
-	}
+	// Get card templates for making cards
+	const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
+	const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceDownCardTemplate"));
+	const emptyTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("emptyCardTemplate"));
 
 	/**
-	 * @param {MO52Card} chosenCard
+	 * @param {import("./Initializers").MO52Card} chosenCard
 	 * @param {number} index
 	 */
 	function makeFaceUpCard(chosenCard, index) {
@@ -1061,6 +1032,17 @@
 	    cardEl.setAttribute("style", `--index: ${index}`);
 	  }
 
+	  // Helper function to set the innerHTML value for an element
+	  /**
+	   * @param {HTMLElement} cardEl
+	   * @param {string} selector
+	   * @param {string} value
+	   */
+	  function setElInnerHTML(cardEl, selector, value) {
+	    const selectedEl = cardEl.querySelector(selector);
+	    if (selectedEl) selectedEl.innerHTML = value;
+	  }
+
 	  // Set card's rank, suit, and name
 	  setElInnerHTML(faceUpCard, ".mo-card__rank", chosenCard.initial);
 	  setElInnerHTML(faceUpCard, ".mo-card__suit", chosenCard.suit);
@@ -1068,7 +1050,6 @@
 
 	  return faceUpCard;
 	}
-
 	/** @param {number} index */
 	function makeFaceDownCard(index) {
 	  const faceDownCard = /** @type {HTMLElement} */ (faceDownTemplate?.content.cloneNode(true));
@@ -1076,7 +1057,6 @@
 	  if (fdCardEl) fdCardEl.setAttribute("style", `--index: ${index}`);
 	  return faceDownCard;
 	}
-
 	/** @param {number} index */
 	function makeEmptyCard(index) {
 	  const emptyCard = /** @type {HTMLElement} */ (emptyTemplate?.content.cloneNode(true));
@@ -1084,7 +1064,6 @@
 	  if (emptyCardEl) emptyCardEl.setAttribute("style", `--index: ${index}`);
 	  return emptyCard;
 	}
-
 	function renderCards() {
 	  Object.entries(PILES).forEach(([pileName, { cards }]) => {
 	    const cardsClone = Array.from(cards);
@@ -1115,32 +1094,9 @@
 	  });
 	}
 
-	/**
-	 * @param {string} fromPile
-	 * @param {string} toPile
-	 */
-	function shiftCards(fromPile, toPile) {
-	  // get top card from origin pile
-	  const topCard = PILES[fromPile].cards.shift();
-
-	  // if card found, process it (if needed), then add it to destination pile and reveal next top card
-	  if (topCard) {
-	    // If top card is an Ace or Joker, move the whole "to" pile to the bottom of the draw pile before moving the top card
-	    if (topCard.nameRank === "Ace" || topCard.nameRank === "Joker") {
-	      const cards = /** @type {MO52Card[]} */ (PILES[toPile].cards).splice(0);
-	      PILES.e5.cards.push(...cards);
-	    }
-
-	    // get next top card and reveal it (if there is one)
-	    if (PILES[fromPile].cards.length) PILES[fromPile].cards[0].facingDown = false;
-
-	    PILES[toPile].cards.unshift(topCard);
-	  }
-	}
-
 	// Function to create commandManagers, should be one per game to manage history (undo/redo)
 	const createCommandManager = () => {
-	  /** @type {{prevPile: Piles, nextPile: Piles}[]} */
+	  /** @type {{prevPile: import("./Initializers").Piles, nextPile: import("./Initializers").Piles}[]} */
 	  // @ts-ignore
 	  let history = [null];
 	  let position = 0;
@@ -1183,7 +1139,7 @@
 	        position -= 1;
 
 	        // Replace the current PILES with the previous state
-	        PILES = prevPile;
+	        replacePiles(prevPile);
 	      }
 
 	      // Finally, do a render
@@ -1200,7 +1156,7 @@
 	        const { nextPile } = history[position];
 
 	        // Replace the current state with the next one
-	        PILES = nextPile;
+	        replacePiles(nextPile);
 	      }
 
 	      // Finally, do a render
@@ -1208,21 +1164,48 @@
 	    },
 	  };
 	};
+	/**
+	 * @param {string} fromPile
+	 * @param {string} toPile
+	 */
+
+	function shiftCards(fromPile, toPile) {
+	  // get top card from origin pile
+	  const topCard = PILES[fromPile].cards.shift();
+
+	  // if card found, process it (if needed), then add it to destination pile and reveal next top card
+	  if (topCard) {
+	    // If top card is an Ace or Joker, move the whole "to" pile to the bottom of the draw pile before moving the top card
+	    if (topCard.nameRank === "Ace" || topCard.nameRank === "Joker") {
+	      const cards = PILES[toPile].cards.splice(0);
+	      PILES.e5.cards.push(...cards);
+	    }
+
+	    // get next top card and reveal it (if there is one)
+	    if (PILES[fromPile].cards.length) PILES[fromPile].cards[0].facingDown = false;
+
+	    PILES[toPile].cards.unshift(topCard);
+	  }
+	}
 
 	// Counts up value of pile's cards, used for royal piles
-	function getPileValue(/** @type {MO52Card[]} */ pileCards) {
+	function getPileValue(/** @type {import("./Initializers").MO52Card[]} */ pileCards) {
 	  return pileCards.reduce((acc, card) => {
 	    return (acc += card.value);
 	  }, 0);
 	}
-
-	// Checks if a royal card is present and face-down
-	function checkIfRoyalDefeated(/** @type {MO52Card[]} */ pileCards) {
+	/**
+	 * Checks if a royal card is present and face-down
+	 * @param {import("./Initializers").MO52Card[]} pileCards
+	 */
+	function checkIfRoyalDefeated(pileCards) {
 	  return pileCards.some((card) => isRoyal(card) && card.facingDown);
 	}
-
-	// Function to determine which piles are 'legal' targets for drag and drop
-	function getValidPiles(/** @type {MO52Card} */ card) {
+	/**
+	 * Determines which piles are 'legal' targets for drag and drop
+	 * @param {import("./Initializers").MO52Card} card
+	 */
+	function getValidPiles(card) {
 	  let validOuterIds;
 
 	  // If a Royal, skip the inner IDs
@@ -1233,14 +1216,13 @@
 
 	  return getValidInnerPiles(card);
 	}
-
 	/**
 	 * Function to check which outer piles might be valid for a given card
-	 * @param {MO52Card} card
+	 * @param {import("./Initializers").MO52Card} card
 	 */
 	function getValidOuterPiles(card) {
 	  return OuterPileIds.reduce((acc, pileId) => {
-	    const pileCards = /** @type {MO52Card[]} */ (PILES[pileId].cards).slice(0);
+	    const pileCards = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0);
 
 	    // Check if empty
 	    if (!pileCards) {
@@ -1261,10 +1243,9 @@
 	    return acc;
 	  }, /** @type {string[]} */ ([]));
 	}
-
 	/**
 	 * Function to check which inner piles might be valid for a given card
-	 * @param {MO52Card} card
+	 * @param {import("./Initializers").MO52Card} card
 	 */
 	function getValidInnerPiles(card) {
 	  return InnerPileIds.reduce((acc, pileId) => {
@@ -1273,7 +1254,7 @@
 	      acc.push(pileId);
 	    } else {
 	      // Get top card, if any
-	      const topPileCard = /** @type {MO52Card[]} */ (PILES[pileId].cards).slice(0)[0];
+	      const topPileCard = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0)[0];
 
 	      // Check if topPileCard is same or lower value, or if pile is empty
 	      if ((topPileCard && topPileCard.value <= card.value) || !topPileCard) {
@@ -1284,7 +1265,6 @@
 	    return acc;
 	  }, /** @type {string[]} */ ([]));
 	}
-
 	/**
 	 * Checks if the toPile is a valid location for the top card of the fromPile
 	 * @param {string} fromPile
@@ -1298,55 +1278,86 @@
 	  return retVal;
 	}
 
-	// Function to highlight 'legal' drop targets
-	function highlightValidPiles(/** @type {string[]} */ validPiles) {
+	// Initialize CommandManager var for later use
+	let CommandManager;
+
+	// Initializes a new game
+	function newGame() {
+	  // setup a new command manager for this game
+	  CommandManager = createCommandManager();
+
+	  // Collect all cards from all piles
+	  Object.entries(PILES).forEach(([pileId, { cards }]) => {
+	    if (pileId !== "e5") {
+	      const pileCards = cards.splice(0);
+	      moDeck.addToDrawPile(pileCards);
+	    }
+	  });
+
+	  // Shuffle cards
+	  moDeck.shuffle(3);
+
+	  // Deal cards out to central piles
+	  dealOutInitialCards();
+
+	  // Lastly, render the current state of the piles
+	  renderCards();
+	}
+
+	// Setup 'onload' event listener
+	document.addEventListener("DOMContentLoaded", function () {
+	  newGame();
+	});
+
+	// Setup button event listeners
+	document.getElementById("newGameButton")?.addEventListener("click", () => newGame());
+	document.getElementById("undoButton")?.addEventListener("click", () => CommandManager.undo());
+	document.getElementById("redoButton")?.addEventListener("click", () => CommandManager.redo());
+
+	// Highlights 'legal' drop targets
+	/** @param {string[]} validPiles */
+	function highlightValidPiles(validPiles) {
 	  validPiles.forEach((pileId) => {
 	    const pileEl = document.getElementById(pileId);
 	    pileEl?.classList.add("pile--valid");
 	  });
 	}
 
-	// Function to clear highlighted valid piles
+	// Clears highlighted valid piles
 	function removeHighlights() {
 	  const currentHighlights = Array.from(document.getElementsByClassName("pile--valid"));
 	  currentHighlights.forEach((el) => el.classList.remove("pile--valid"));
 	}
 
-	/** Drag and drop stuff */
+	/** NOTE: Drag and drop stuff */
 	const pileEls = Array.from(document.getElementsByClassName("pile"));
 	const drake = dragula$1(pileEls, {
 	  moves: function (_, source) {
-	    if (source?.classList.contains("pile--inner") || source?.classList.contains("pile--outer")) {
-	      return false;
-	    }
-	    return true;
+	    return source ? source.classList.contains("pile--drawpile") : false;
 	  },
 	  accepts: function (_, toPileEl, fromPileEl) {
 	    const fromPile = fromPileEl?.id;
 	    const toPile = toPileEl?.id;
-	    if (fromPile && toPile) return isValidPile(fromPile, toPile);
-	    return false;
+	    return fromPile && toPile ? isValidPile(fromPile, toPile) : false;
 	  },
 	});
-	drake.on("drag", (_, source) => {
+
+	drake.on("drag", function (_, source) {
 	  // Grab a copy of the top card from the 'source' pile
-	  const card = /** @type {MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
+	  const card = /** @type {import("./Initializers").MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
 	  const validPiles = getValidPiles(card);
 
 	  if (validPiles.length) {
 	    highlightValidPiles(validPiles);
 	  }
 	});
-	drake.on("drop", (_, target, source) => {
+
+	drake.on("drop", function (_, target, source) {
 	  removeHighlights();
 	  const fromPile = source.id;
 	  const toPile = target.id;
 
 	  CommandManager.doShift(fromPile, toPile);
-	});
-
-	document.addEventListener("DOMContentLoaded", function () {
-	  newGame();
 	});
 
 })();

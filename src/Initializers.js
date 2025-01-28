@@ -161,3 +161,7 @@ export function dealOutInitialCards() {
 export function isRoyal(card) {
   return card.value > 10;
 }
+
+export function getTopCard(pileID) {
+  return PILES[pileID].cards.slice(0, 1)[0];
+}

@@ -1,4 +1,4 @@
-import { OuterPileIds, PILES, InnerPileIds, isRoyal, suitColor, NearestInnerPile } from "./Initializers";
+import { OuterPileIds, PILES, InnerPileIds, isRoyal, suitColor, NearestInnerPile, getTopCard } from "./Initializers";
 
 // Counts up value of pile's cards, used for royal piles
 function getPileValue(/** @type {import("./Initializers").MO52Card[]} */ pileCards) {
@@ -78,7 +78,7 @@ function getRoyalPileMatches(card) {
 
     // Get the nearest neighbor's top card
     const neighborPile = NearestInnerPile[pileID];
-    const topNeighbor = PILES[neighborPile].cards.slice(0, 1)[0];
+    const topNeighbor = getTopCard(neighborPile);
 
     // First, check if the current pile makes a suit match with its nearest neighbor
     const suitMatch = getSuitMatch(pileID, topNeighbor, card);
@@ -154,17 +154,17 @@ function getValidOuterPiles(card) {
 // Function to check which inner piles might be valid for a given card
 /** @param {import("./Initializers").MO52Card} card */
 function getValidInnerPiles(card) {
-  return InnerPileIds.reduce((acc, pileId) => {
+  return InnerPileIds.reduce((acc, pileID) => {
     // If an Ace or Joker, add the pileId and return early
     if (card.value <= 1) {
-      acc.push(pileId);
+      acc.push(pileID);
     } else {
       // Get top card, if any
-      const topPileCard = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0)[0];
+      const topPileCard = getTopCard(pileID);
 
       // Check if topPileCard is same or lower value, or if pile is empty
       if ((topPileCard && topPileCard.value <= card.value) || !topPileCard) {
-        acc.push(pileId);
+        acc.push(pileID);
       }
     }
 
@@ -179,7 +179,7 @@ function getValidInnerPiles(card) {
  * @returns {boolean}
  */
 export function isValidPile(fromPile, toPile) {
-  const card = PILES[fromPile].cards.slice(0)[0];
+  const card = getTopCard(fromPile);
   const validPiles = getValidPiles(card);
   const retVal = validPiles.includes(toPile);
   return retVal;

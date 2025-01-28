@@ -1050,6 +1050,10 @@
 	  return card.value > 10;
 	}
 
+	function getTopCard(pileID) {
+	  return PILES[pileID].cards.slice(0, 1)[0];
+	}
+
 	// Get card templates for making cards
 	const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
 	const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceDownCardTemplate"));
@@ -1303,7 +1307,7 @@
 
 	    // Get the nearest neighbor's top card
 	    const neighborPile = NearestInnerPile[pileID];
-	    const topNeighbor = PILES[neighborPile].cards.slice(0, 1)[0];
+	    const topNeighbor = getTopCard(neighborPile);
 
 	    // First, check if the current pile makes a suit match with its nearest neighbor
 	    const suitMatch = getSuitMatch(pileID, topNeighbor, card);
@@ -1379,17 +1383,17 @@
 	// Function to check which inner piles might be valid for a given card
 	/** @param {import("./Initializers").MO52Card} card */
 	function getValidInnerPiles(card) {
-	  return InnerPileIds.reduce((acc, pileId) => {
+	  return InnerPileIds.reduce((acc, pileID) => {
 	    // If an Ace or Joker, add the pileId and return early
 	    if (card.value <= 1) {
-	      acc.push(pileId);
+	      acc.push(pileID);
 	    } else {
 	      // Get top card, if any
-	      const topPileCard = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0)[0];
+	      const topPileCard = getTopCard(pileID);
 
 	      // Check if topPileCard is same or lower value, or if pile is empty
 	      if ((topPileCard && topPileCard.value <= card.value) || !topPileCard) {
-	        acc.push(pileId);
+	        acc.push(pileID);
 	      }
 	    }
 
@@ -1404,7 +1408,7 @@
 	 * @returns {boolean}
 	 */
 	function isValidPile(fromPile, toPile) {
-	  const card = PILES[fromPile].cards.slice(0)[0];
+	  const card = getTopCard(fromPile);
 	  const validPiles = getValidPiles(card);
 	  const retVal = validPiles.includes(toPile);
 	  return retVal;
@@ -1468,7 +1472,7 @@
 
 	drake.on("drag", function (_, source) {
 	  // Grab a copy of the top card from the source pile
-	  const card = /** @type {import("./Initializers").MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
+	  const card = getTopCard(source.id);
 	  const validPiles = getValidPiles(card);
 
 	  if (validPiles.length) {

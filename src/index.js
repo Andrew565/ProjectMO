@@ -1,5 +1,5 @@
 import dragula from "dragula";
-import { collectAndShuffleCards, dealOutInitialCards, PILES } from "./Initializers";
+import { collectAndShuffleCards, dealOutInitialCards, getTopCard, PILES } from "./Initializers";
 import { createCommandManager } from "./CommandManager";
 import { renderCards } from "./Renderers";
 import { isValidPile, getValidPiles } from "./Validators";
@@ -62,7 +62,7 @@ const drake = dragula(pileEls, {
 
 drake.on("drag", function (_, source) {
   // Grab a copy of the top card from the source pile
-  const card = /** @type {import("./Initializers").MO52Card[]} */ (PILES[source.id].cards).slice(0, 1)[0];
+  const card = getTopCard(source.id);
   const validPiles = getValidPiles(card);
 
   if (validPiles.length) {

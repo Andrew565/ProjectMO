@@ -240,6 +240,7 @@
 
 Roughly in order of priority.
 
+- TODO: Create a helper function for getting the top card off of a pile
 - TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
 - TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
 - TODO: Handle a game won scenario (in `renderCards` or event tick?)

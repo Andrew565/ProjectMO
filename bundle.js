@@ -1350,16 +1350,15 @@
 	  return neighborColor === suitColor[card.suit] ? { pileID, neighborValue, matchType: "color" } : null;
 	}
 
-	// Function to check which outer piles might be valid for a given card
-	// FIXME: Rewrite this function to account for non-royals only
+	// Function to check which outer piles might be valid for a given non-royal card
 	/** @param {import("./Initializers").MO52Card} card */
 	function getValidOuterPiles(card) {
 	  return OuterPileIds.reduce((acc, pileId) => {
 	    const pileCards = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0);
 
-	    // Check if empty
+	    // Check if empty and return early if so
 	    if (!pileCards) {
-	      acc.push(pileId);
+	      return acc;
 	    }
 
 	    // If there's a royal, check that the royal hasn't already been defeated

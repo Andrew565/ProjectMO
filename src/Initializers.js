@@ -23,6 +23,14 @@ export const suitIcons = {
   J: "🤪",
 };
 
+// Suit colors for when suit is not a match
+export const suitColor = {
+  [suitIcons["C"]]: "Black",
+  [suitIcons["H"]]: "Red",
+  [suitIcons["S"]]: "Black",
+  [suitIcons["D"]]: "Red",
+};
+
 // Initialize Cards
 const BaseCards = /** @type MO52Card[] */ (StandardCards.standard52DeckOfCards).map((card) => {
   // Adjust value for zero-based numberRank
@@ -56,9 +64,25 @@ export const moDeck = new DeckOfCards(BaseCards); // Pile Ids for inner and oute
 
 export const InnerPileIds = ["b2", "c2", "d2", "b3", "c3", "d3", "b4", "c4", "d4"];
 export const OuterPileIds = ["b1", "c1", "d1", "a2", "e2", "a3", "e3", "a4", "e4", "b5", "c5", "d5"];
+
+// Lists the nearest inner pile for a given outer pile key
+export const NearestInnerPile = {
+  b1: "b2",
+  c1: "c2",
+  d1: "d2",
+  a2: "b2",
+  e2: "d2",
+  a3: "b3",
+  e3: "d3",
+  a4: "b4",
+  e4: "d4",
+  b5: "b4",
+  c5: "c4",
+  d5: "d4",
+};
+
 // Initialize Piles
 /** @type Piles */
-
 export let PILES = {
   a2: { cards: [] },
   a3: { cards: [] },

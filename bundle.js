@@ -911,6 +911,14 @@
 	  J: "🤪",
 	};
 
+	// Suit colors for when suit is not a match
+	const suitColor = {
+	  [suitIcons["C"]]: "Black",
+	  [suitIcons["H"]]: "Red",
+	  [suitIcons["S"]]: "Black",
+	  [suitIcons["D"]]: "Red",
+	};
+
 	// Initialize Cards
 	const BaseCards = /** @type MO52Card[] */ (R.standard52DeckOfCards).map((card) => {
 	  // Adjust value for zero-based numberRank
@@ -944,9 +952,25 @@
 
 	const InnerPileIds = ["b2", "c2", "d2", "b3", "c3", "d3", "b4", "c4", "d4"];
 	const OuterPileIds = ["b1", "c1", "d1", "a2", "e2", "a3", "e3", "a4", "e4", "b5", "c5", "d5"];
+
+	// Lists the nearest inner pile for a given outer pile key
+	const NearestInnerPile = {
+	  b1: "b2",
+	  c1: "c2",
+	  d1: "d2",
+	  a2: "b2",
+	  e2: "d2",
+	  a3: "b3",
+	  e3: "d3",
+	  a4: "b4",
+	  e4: "d4",
+	  b5: "b4",
+	  c5: "c4",
+	  d5: "d4",
+	};
+
 	// Initialize Piles
 	/** @type Piles */
-
 	let PILES = {
 	  a2: { cards: [] },
 	  a3: { cards: [] },
@@ -1207,32 +1231,128 @@
 	    return (acc += card.value);
 	  }, 0);
 	}
-	/**
-	 * Checks if a royal card is present and face-down
-	 * @param {import("./Initializers").MO52Card[]} pileCards
-	 */
+
+	// Checks if a royal card is present and face-down
+	/** @param {import("./Initializers").MO52Card[]} pileCards */
 	function checkIfRoyalDefeated(pileCards) {
 	  return pileCards.some((card) => isRoyal(card) && card.facingDown);
 	}
-	/**
-	 * Determines which piles are 'legal' targets for drag and drop
-	 * @param {import("./Initializers").MO52Card} card
-	 */
+
+	// Determines which piles are 'legal' targets for drag and drop
+	/** @param {import("./Initializers").MO52Card} card */
 	function getValidPiles(card) {
-	  let validOuterIds;
+	  let validPiles;
 
-	  // If a Royal, skip the inner IDs
+	  // If a Royal, get just valid Royal piles
 	  if (isRoyal(card)) {
-	    validOuterIds = getValidOuterPiles(card);
-	    return validOuterIds.length ? validOuterIds : [];
+	    return getValidRoyalPiles(card);
+	  } else {
+	    // Otherwise, check if there are any valid inner piles
+	    validPiles = getValidInnerPiles(card);
+	    // Lastly, if no valid inner piles, check outer piles
+	    return validPiles.length ? validPiles : getValidOuterPiles(card);
 	  }
-
-	  return getValidInnerPiles(card);
 	}
+
 	/**
-	 * Function to check which outer piles might be valid for a given card
-	 * @param {import("./Initializers").MO52Card} card
+	 * @typedef {{pileID: string, neighborValue: number, matchType: string}} PileMatch
 	 */
+
+	// Function to ascertain where a Royal card can move to
+	/**
+	 * @param {import("./Initializers").MO52Card} card
+	 * @returns {string[]}
+	 */
+	function getValidRoyalPiles(card) {
+	  let validPileMatches = getRoyalPileMatches(card);
+
+	  const order = { suit: 0, color: 1, extra: 2 };
+	  validPileMatches = validPileMatches
+	    // Sorts by above order, so suit matches come first, then color, etc.
+	    .sort((a, b) => {
+	      return order[a.matchType] - order[b.matchType];
+	    })
+	    .reduce((acc, match) => {
+	      // Init acc if empty
+	      if (!acc[0]) {
+	        acc.push(match);
+	        return acc;
+	      }
+
+	      // If same type and value, push onto acc
+	      if (acc[0].matchType === match.matchType && acc[0].neighborValue === match.neighborValue) acc.push(match);
+
+	      // If same type but match has higher value, replace acc
+	      if (acc[0].matchType === match.matchType && acc[0].neighborValue < match.neighborValue) acc = [match];
+
+	      return acc;
+	    }, /** @type {PileMatch[]} */ ([]));
+
+	  return validPileMatches.map((match) => match.pileID);
+	}
+
+	// Function to determine possible matches and match types for Royals to move to
+	/** @param {import("./Initializers").MO52Card} card */
+	function getRoyalPileMatches(card) {
+	  let validPileMatches = /** @type PileMatch[] */ ([]);
+
+	  // Reduce OuterPileIds into validPileMatches
+	  validPileMatches = OuterPileIds.reduce((acc, pileID) => {
+	    // Return early if outer pile not empty (aka not a valid pile)
+	    if (PILES[pileID].cards.length !== 0) return acc;
+
+	    // Get the nearest neighbor's top card
+	    const neighborPile = NearestInnerPile[pileID];
+	    const topNeighbor = PILES[neighborPile].cards.slice(0, 1)[0];
+
+	    // First, check if the current pile makes a suit match with its nearest neighbor
+	    const suitMatch = getSuitMatch(pileID, topNeighbor, card);
+	    suitMatch && acc.push(suitMatch);
+	    if (!suitMatch) {
+	      // If not a suit match, check for color match
+	      const colorMatch = getColorMatch(pileID, topNeighbor, card);
+	      colorMatch && acc.push(colorMatch);
+	      if (!colorMatch) {
+	        // If not a suit or color match, then it's an 'extra' match
+	        acc.push({ pileID, neighborValue: topNeighbor.value, matchType: "extra" });
+	      }
+	    }
+
+	    return acc;
+	  }, /** @type PileMatch[] */ ([]));
+	  return validPileMatches;
+	}
+
+	// Function to check if there is a suit match for the provided pile and card
+	/**
+	 * @param {string} pileID
+	 * @param {import("./Initializers").MO52Card} topNeighbor
+	 * @param {import("./Initializers").MO52Card} card
+	 * @returns {PileMatch | null}
+	 */
+	function getSuitMatch(pileID, topNeighbor, card) {
+	  const neighborSuit = topNeighbor.suit;
+	  const neighborValue = topNeighbor.value;
+	  return neighborSuit === card.suit ? { pileID, neighborValue, matchType: "suit" } : null;
+	}
+
+	// Function to check if there is a color match for the provided pile and card
+	/**
+	 * @param {string} pileID
+	 * @param {import("./Initializers").MO52Card} topNeighbor
+	 * @param {import("./Initializers").MO52Card} card
+	 * @returns {PileMatch | null}
+	 */
+	function getColorMatch(pileID, topNeighbor, card) {
+	  const neighborSuit = topNeighbor.suit;
+	  const neighborColor = suitColor[neighborSuit];
+	  const neighborValue = topNeighbor.value;
+	  return neighborColor === suitColor[card.suit] ? { pileID, neighborValue, matchType: "color" } : null;
+	}
+
+	// Function to check which outer piles might be valid for a given card
+	// FIXME: Rewrite this function to account for non-royals only
+	/** @param {import("./Initializers").MO52Card} card */
 	function getValidOuterPiles(card) {
 	  return OuterPileIds.reduce((acc, pileId) => {
 	    const pileCards = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0);
@@ -1256,10 +1376,9 @@
 	    return acc;
 	  }, /** @type {string[]} */ ([]));
 	}
-	/**
-	 * Function to check which inner piles might be valid for a given card
-	 * @param {import("./Initializers").MO52Card} card
-	 */
+
+	// Function to check which inner piles might be valid for a given card
+	/** @param {import("./Initializers").MO52Card} card */
 	function getValidInnerPiles(card) {
 	  return InnerPileIds.reduce((acc, pileId) => {
 	    // If an Ace or Joker, add the pileId and return early
@@ -1278,8 +1397,9 @@
 	    return acc;
 	  }, /** @type {string[]} */ ([]));
 	}
+
+	// Checks if the toPile is valid for the top card of the fromPile
 	/**
-	 * Checks if the toPile is a valid location for the top card of the fromPile
 	 * @param {string} fromPile
 	 * @param {string} toPile
 	 * @returns {boolean}

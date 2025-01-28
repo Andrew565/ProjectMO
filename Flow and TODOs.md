@@ -57,7 +57,6 @@
           3. Make a copy of the top card from the source pile
           4. Get the list of `validPiles` from `getValidPiles(card)`
           5. If `!validPiles.includes(toPile)` then stop the transfer and return early as it is not a valid move
-             1. FIXME: Currently uses `drake.cancel` which apparently doesn't work. Suggestion is to move this logic to a "dragula accepts" prop.
           6. If a valid move, call `CommandManager.doShift(fromPile, toPile)`
    24. Last but not least, add a "DOMContentLoaded" event listener that calls `newGame()` when the document is ready
        1. Makes sure that there's a new game ready to play as soon as possible
@@ -241,7 +240,6 @@
 
 Roughly in order of priority.
 
-- TODO: Improve `getValidPiles` for royals to show "specific" placements (i.e. if a Heart, show highest heart, then diamonds if no hearts, then highest black card)
 - TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
 - TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
 - TODO: Handle a game won scenario (in `renderCards` or event tick?)

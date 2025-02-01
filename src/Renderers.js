@@ -1,4 +1,4 @@
-import { PILES, InnerPileIds } from "./Initializers";
+import { PILES, InnerPileIds } from "./constants";
 
 // Get card templates for making cards
 export const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
@@ -6,7 +6,7 @@ export const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.get
 export const emptyTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("emptyCardTemplate"));
 
 /**
- * @param {import("./Initializers").MO52Card} chosenCard
+ * @param {import("./constants").MO52Card} chosenCard
  * @param {number} index
  */
 function makeFaceUpCard(chosenCard, index) {

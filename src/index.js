@@ -1,16 +1,25 @@
 import dragula from "dragula";
-import { collectAndShuffleCards, dealOutInitialCards, getTopCard, PILES } from "./Initializers";
+import { collectAndShuffleCards, dealOutInitialCards } from "./Initializers";
 import { createCommandManager } from "./CommandManager";
 import { renderCards } from "./Renderers";
 import { isValidPile, getValidPiles } from "./Validators";
+import { getTopCard } from "./Helpers";
+import { createGameManager } from "./GameManager";
 
 // Initialize CommandManager var for later use
 let CommandManager;
 
+// Initialize GameManager var for later use
+/** @type {import("./GameManager").GameManager} */
+let GameManager;
+
 // Initializes a new game
 function newGame() {
-  // setup a new command manager for this game
+  // Setup a new command manager for this game
   CommandManager = createCommandManager();
+
+  // Setup a new game manager for this game
+  GameManager = createGameManager();
 
   // Collect all cards from all piles
   collectAndShuffleCards();
@@ -75,5 +84,12 @@ drake.on("drop", function (_, target, source) {
   const fromPile = source.id;
   const toPile = target.id;
 
+  // Shift the cards
   CommandManager.doShift(fromPile, toPile);
+
+  // Check for defeat, win, and loss conditions
+  GameManager.tick(toPile);
+
+  // Finally, do a render
+  renderCards();
 });

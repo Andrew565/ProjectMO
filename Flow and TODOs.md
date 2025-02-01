@@ -240,9 +240,8 @@
 
 Roughly in order of priority.
 
-- TODO: Handle lining up enough points to kill a royal (in `drake.drop`, `renderCards`, or event loop tick?)
-- TODO: Handle a game over scenario (in `renderCards` maybe? Or in a game event loop tick?)
-- TODO: Handle a game won scenario (in `renderCards` or event tick?)
-- TODO: Handle a royal getting too strong (21 points or more, see above)
+- FIXME: When adding armor, don't show empty piles as valid
+- TODO: Improve display of armor to make it more visible and obvious
+- TODO: Improve the game over alerts, maybe use a popup?
 - TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
 - TODO: Add a more "interactive" tutorial

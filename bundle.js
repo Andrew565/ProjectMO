@@ -898,7 +898,6 @@
 	 * @prop {number} value
 	 * @prop {boolean} facingDown
 	 */
-
 	/**
 	 * @typedef {{[x: string]: {cards: MO52Card[]}}} Piles
 	 */
@@ -912,6 +911,7 @@
 	};
 
 	// Suit colors for when suit is not a match
+	// Key: card.suit
 	const suitColor = {
 	  [suitIcons["C"]]: "Black",
 	  [suitIcons["H"]]: "Red",
@@ -938,6 +938,7 @@
 
 	  // Setup suit icons
 	  card.suit = suitIcons[card.suit[0]];
+
 	  // Turn all cards face-down to start
 	  card.facingDown = true;
 
@@ -948,8 +949,9 @@
 	BaseCards.push({ ...R.FancyJoker, initial: "0", value: 0, facingDown: true, suit: suitIcons["J"] });
 
 	// Initialize Deck
-	const moDeck = new e(BaseCards); // Pile Ids for inner and outer piles, used for iterating over piles
+	const moDeck = new e(BaseCards);
 
+	// Pile Ids for inner and outer piles, used for iterating over piles
 	const InnerPileIds = ["b2", "c2", "d2", "b3", "c3", "d3", "b4", "c4", "d4"];
 	const OuterPileIds = ["b1", "c1", "d1", "a2", "e2", "a3", "e3", "a4", "e4", "b5", "c5", "d5"];
 
@@ -967,6 +969,34 @@
 	  b5: "b4",
 	  c5: "c4",
 	  d5: "d4",
+	};
+
+	// Rows and columns along with their royals, used to check if the royal has been defeated
+	// Key: the "to pile", aka the pile a card was just dropped on
+	// Value: the unit(s) which need to be checked for 'defeat' condition (1 or 2 units per key, 2 if on a corner)
+	/** @type {{[x: string]: Array<{cardsToCheck: string[], royalPile: string}>}} */
+	const RoyalUnits = {
+	  b2: [
+	    { cardsToCheck: ["c2", "d2"], royalPile: "e2" },
+	    { cardsToCheck: ["b3", "b4"], royalPile: "b5" },
+	  ],
+	  c2: [{ cardsToCheck: ["c3", "c4"], royalPile: "c5" }],
+	  d2: [
+	    { cardsToCheck: ["c2", "b2"], royalPile: "a2" },
+	    { cardsToCheck: ["d3", "d4"], royalPile: "d5" },
+	  ],
+	  b3: [{ cardsToCheck: ["c3", "d3"], royalPile: "e3" }],
+	  c3: [], // Center can't trigger any kills
+	  d3: [{ cardsToCheck: ["c3", "b3"], royalPile: "a3" }],
+	  b4: [
+	    { cardsToCheck: ["c4", "d4"], royalPile: "e4" },
+	    { cardsToCheck: ["b3", "b2"], royalPile: "b1" },
+	  ],
+	  c4: [{ cardsToCheck: ["c3", "c2"], royalPile: "c1" }],
+	  d4: [
+	    { cardsToCheck: ["c4", "b4"], royalPile: "a4" },
+	    { cardsToCheck: ["d3", "d2"], royalPile: "d1" },
+	  ],
 	};
 
 	// Initialize Piles
@@ -996,8 +1026,27 @@
 	  e5: { cards: moDeck.drawPile },
 	};
 
+	// Helper function to replace PILES with one from history
 	function replacePiles(newPiles) {
 	  PILES = newPiles;
+	}
+
+	// Helper function to determine
+	function isRoyal(card) {
+	  return card.value > 10;
+	}
+
+	function getPileCards(pileID) {
+	  return PILES[pileID].cards;
+	}
+
+	function getTopCard(pileID) {
+	  return PILES[pileID].cards.slice(0, 1)[0];
+	}
+	/** @param {import("./constants").MO52Card[]} cards  */
+
+	function getRoyalCard(cards) {
+	  return cards.find((card) => isRoyal(card));
 	}
 
 	function collectAndShuffleCards() {
@@ -1045,22 +1094,13 @@
 	  moDeck.drawPile[0].facingDown = false;
 	} /** @param {import("./Initializers").MO52Card} card */
 
-	// Needed here to prevent circular dependency
-	function isRoyal(card) {
-	  return card.value > 10;
-	}
-
-	function getTopCard(pileID) {
-	  return PILES[pileID].cards.slice(0, 1)[0];
-	}
-
 	// Get card templates for making cards
 	const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
 	const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceDownCardTemplate"));
 	const emptyTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("emptyCardTemplate"));
 
 	/**
-	 * @param {import("./Initializers").MO52Card} chosenCard
+	 * @param {import("./constants").MO52Card} chosenCard
 	 * @param {number} index
 	 */
 	function makeFaceUpCard(chosenCard, index) {
@@ -1137,7 +1177,7 @@
 
 	// Function to create commandManagers, should be one per game to manage history (undo/redo)
 	const createCommandManager = () => {
-	  /** @type {{prevPile: import("./Initializers").Piles, nextPile: import("./Initializers").Piles}[]} */
+	  /** @type {{prevPile: import("./constants").Piles, nextPile: import("./constants").Piles}[]} */
 	  // @ts-ignore
 	  let history = [null];
 	  let position = 0;
@@ -1165,9 +1205,6 @@
 	      // Save the states to history
 	      history.push({ prevPile, nextPile });
 	      position += 1;
-
-	      // Finally, do a render
-	      renderCards();
 	    },
 
 	    undo() {
@@ -1211,7 +1248,7 @@
 	 */
 
 	function shiftCards(fromPile, toPile) {
-	  // get top card from origin pile
+	  // Shift off top card from origin pile
 	  const topCard = PILES[fromPile].cards.shift();
 
 	  // if card found, process it (if needed), then add it to destination pile and reveal next top card
@@ -1219,12 +1256,14 @@
 	    // If top card is an Ace or Joker, move the whole "to" pile to the bottom of the draw pile before moving the top card
 	    if (topCard.nameRank === "Ace" || topCard.nameRank === "Joker") {
 	      const cards = PILES[toPile].cards.splice(0);
-	      PILES.e5.cards.push(...cards);
+	      cards.forEach((card) => (card.facingDown = true));
+	      PILES["e5"].cards.push(...cards);
 	    }
 
-	    // get next top card and reveal it (if there is one)
+	    // Get next top card and reveal it (if there is one)
 	    if (PILES[fromPile].cards.length) PILES[fromPile].cards[0].facingDown = false;
 
+	    // Shift on the top card to the top of the "To" pile
 	    PILES[toPile].cards.unshift(topCard);
 	  }
 	}
@@ -1414,13 +1453,174 @@
 	  return retVal;
 	}
 
+	/**
+	 * @typedef {(pileIDsToCheck: string[], cardsToBeat: import("./constants").MO52Card[]) => boolean} DefeatCondition
+	 */
+
+	/** @type {{[x: string]: DefeatCondition}} */
+	const DefeatConditions = {
+	  // Jack Defeat Condition == total value >= 11 plus armor
+	  J: function (pileIDsToCheck, cardsToBeat) {
+	    // First get the total value of the cards to check
+	    const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
+	    const cardsToCheckTotal = cardsToCheck.reduce((acc, card) => {
+	      acc += card.value;
+	      return acc;
+	    }, 0);
+
+	    // Then get the total value of the cards to beat
+	    const cardsToBeatTotal = cardsToBeat.reduce((acc, card) => {
+	      acc += card.value;
+	      return acc;
+	    }, 0);
+
+	    // Last, return if the check total is greater than or equal to the beat total
+	    return cardsToCheckTotal >= cardsToBeatTotal;
+	  },
+	  // Queen Defeat Condition == total value of same color is >= 12 plus armor
+	  Q: function (pileIDsToCheck, cardsToBeat) {
+	    // First get the royal pile and the royal card specifically so we can check for the needed color
+	    const royalCard = getRoyalCard(cardsToBeat);
+
+	    // Return false early if there is no royal
+	    if (!royalCard) return false;
+
+	    // Get the needed color for check cards to match
+	    const neededColor = suitColor[royalCard.suit];
+
+	    // Get the total value of the cards to beat
+	    const cardsToBeatTotal = cardsToBeat.reduce((acc, card) => {
+	      acc += card.value;
+	      return acc;
+	    }, 0);
+
+	    // Next get the cards to check, filter them, and total their values
+	    const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
+	    const cardsToCheckTotal = cardsToCheck
+	      .filter((card) => suitColor[card.suit] === neededColor)
+	      .reduce((acc, card) => {
+	        acc += card.value;
+	        return acc;
+	      }, 0);
+
+	    // Last, return if the check total is greater than or equal to the beat total
+	    return cardsToCheckTotal >= cardsToBeatTotal;
+	  },
+	  // King Defeat Condition == total value of same suit is >= 13 plus armor
+	  K: function (pileIDsToCheck, cardsToBeat) {
+	    // First get the royal pile and the royal card specifically so we can check for the needed color
+	    const royalCard = getRoyalCard(cardsToBeat);
+
+	    // Return false early if there is no royal
+	    if (!royalCard) return false;
+
+	    // Get the needed color for check cards to match
+	    const neededSuit = royalCard.suit;
+
+	    // Get the total value of the cards to beat
+	    const cardsToBeatTotal = cardsToBeat.reduce((acc, card) => {
+	      acc += card.value;
+	      return acc;
+	    }, 0);
+
+	    // Next get the cards to check, filter them, and total their values
+	    const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
+	    const cardsToCheckTotal = cardsToCheck
+	      .filter((card) => card.suit === neededSuit)
+	      .reduce((acc, card) => {
+	        acc += card.value;
+	        return acc;
+	      }, 0);
+
+	    // Last, return if the check total is greater than or equal to the beat total
+	    return cardsToCheckTotal >= cardsToBeatTotal;
+	  },
+	};
+
+	/**
+	 * @typedef {{tick: (toPile: string) => void}} GameManager
+	 */
+
+	// Function to create a Game Manager, which will manage game 'ticks' as well as verifying success/defeat scenarios
+	/** @returns {GameManager} */
+	const createGameManager = () => {
+	  /** @param {string} toPile */
+	  function checkIfRoyalsDefeated(toPile) {
+	    // Get the Royal Units for the specified pile
+	    const unitsToCheck = RoyalUnits[toPile];
+	    // For each unit, check for its "defeat" condition
+	    unitsToCheck.forEach((unit) => {
+	      const royalPile = getPileCards(unit.royalPile);
+	      const royalCard = getRoyalCard(royalPile);
+	      if (royalCard) {
+	        const defeated = DefeatConditions[royalCard.initial](unit.cardsToCheck, royalPile);
+	        if (defeated) {
+	          // If royal defeated, flip its pile face down
+	          royalPile.forEach((card) => (card.facingDown = true));
+	        }
+	      }
+	    });
+	  }
+
+	  /** @returns {Boolean} */
+	  function checkIfGameWon() {
+	    // Get all of the outer piles and see if all 12 are face-down
+	    return OuterPileIds.every((pileId) => {
+	      const cards = PILES[pileId].cards;
+	      return cards && cards.every((card) => card.facingDown);
+	    });
+	  }
+
+	  /** @returns {Boolean} */
+	  function checkIfGameLost() {
+	    // Get the top card of the draw pile
+	    const topCard = getTopCard("e5");
+
+	    // If 0 validPiles for top card, then game unwinnable
+	    return getValidPiles(topCard).length === 0;
+	  }
+
+	  let gameWon = false;
+	  let gameLost = false;
+
+	  return {
+	    tick: (toPile) => {
+	      // Skip checks if toPile is an Outer pile
+	      if (OuterPileIds.includes(toPile)) return;
+
+	      // Check if any Royals were defeated in the last shift
+	      checkIfRoyalsDefeated(toPile);
+
+	      // Check if the game has been won
+	      gameWon = checkIfGameWon();
+	      if (gameWon) {
+	        console.log("YOU WIN!");
+	        return;
+	      }
+
+	      // Lastly, check if the game has entered a "no win" situation
+	      gameLost = checkIfGameLost();
+	      if (gameLost) {
+	        console.log("GAME OVER, YOU HAVE LOST");
+	      }
+	    },
+	  };
+	};
+
 	// Initialize CommandManager var for later use
 	let CommandManager;
 
+	// Initialize GameManager var for later use
+	/** @type {import("./GameManager").GameManager} */
+	let GameManager;
+
 	// Initializes a new game
 	function newGame() {
-	  // setup a new command manager for this game
+	  // Setup a new command manager for this game
 	  CommandManager = createCommandManager();
+
+	  // Setup a new game manager for this game
+	  GameManager = createGameManager();
 
 	  // Collect all cards from all piles
 	  collectAndShuffleCards();
@@ -1485,7 +1685,14 @@
 	  const fromPile = source.id;
 	  const toPile = target.id;
 
+	  // Shift the cards
 	  CommandManager.doShift(fromPile, toPile);
+
+	  // Check for defeat, win, and loss conditions
+	  GameManager.tick(toPile);
+
+	  // Finally, do a render
+	  renderCards();
 	});
 
 })();

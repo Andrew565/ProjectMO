@@ -1,9 +1,10 @@
-import { PILES, replacePiles } from "./Initializers";
+import { PILES, replacePiles } from "./constants";
+import { getTopCard } from "./Helpers";
 import { renderCards } from "./Renderers";
 
 // Function to create commandManagers, should be one per game to manage history (undo/redo)
 export const createCommandManager = () => {
-  /** @type {{prevPile: import("./Initializers").Piles, nextPile: import("./Initializers").Piles}[]} */
+  /** @type {{prevPile: import("./constants").Piles, nextPile: import("./constants").Piles}[]} */
   // @ts-ignore
   let history = [null];
   let position = 0;
@@ -31,9 +32,6 @@ export const createCommandManager = () => {
       // Save the states to history
       history.push({ prevPile, nextPile });
       position += 1;
-
-      // Finally, do a render
-      renderCards();
     },
 
     undo() {
@@ -77,7 +75,7 @@ export const createCommandManager = () => {
  */
 
 export function shiftCards(fromPile, toPile) {
-  // get top card from origin pile
+  // Shift off top card from origin pile
   const topCard = PILES[fromPile].cards.shift();
 
   // if card found, process it (if needed), then add it to destination pile and reveal next top card
@@ -85,12 +83,14 @@ export function shiftCards(fromPile, toPile) {
     // If top card is an Ace or Joker, move the whole "to" pile to the bottom of the draw pile before moving the top card
     if (topCard.nameRank === "Ace" || topCard.nameRank === "Joker") {
       const cards = PILES[toPile].cards.splice(0);
-      PILES.e5.cards.push(...cards);
+      cards.forEach((card) => (card.facingDown = true));
+      PILES["e5"].cards.push(...cards);
     }
 
-    // get next top card and reveal it (if there is one)
+    // Get next top card and reveal it (if there is one)
     if (PILES[fromPile].cards.length) PILES[fromPile].cards[0].facingDown = false;
 
+    // Shift on the top card to the top of the "To" pile
     PILES[toPile].cards.unshift(topCard);
   }
 }

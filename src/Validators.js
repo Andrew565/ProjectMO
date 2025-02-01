@@ -1,4 +1,5 @@
-import { OuterPileIds, PILES, InnerPileIds, isRoyal, suitColor, NearestInnerPile, getTopCard } from "./Initializers";
+import { OuterPileIds, PILES, InnerPileIds, suitColor, NearestInnerPile } from "./constants";
+import { isRoyal, getTopCard } from "./Helpers";
 
 // Counts up value of pile's cards, used for royal piles
 function getPileValue(/** @type {import("./Initializers").MO52Card[]} */ pileCards) {

@@ -1,5 +1,7 @@
 # Project MO Flow Diagram
 
+NOTE: This Flow document is wildly out of date now, I wrote it before I split everything up into separate modules. I may or may not update it in the future, but it served it's purpose.
+
 ## Upon Page Load
 
 1. HTML Loads
@@ -235,13 +237,3 @@
 
 1. Get `currentHighlights`
 2. Remove "pile--valid" from `currentHighlights`
-
-## KNOWN TODOS AND FIXMES
-
-Roughly in order of priority.
-
-- FIXME: When adding armor, don't show empty piles as valid
-- TODO: Improve display of armor to make it more visible and obvious
-- TODO: Improve the game over alerts, maybe use a popup?
-- TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
-- TODO: Add a more "interactive" tutorial

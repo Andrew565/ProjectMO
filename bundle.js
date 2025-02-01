@@ -1242,11 +1242,11 @@
 	    },
 	  };
 	};
+
 	/**
 	 * @param {string} fromPile
 	 * @param {string} toPile
 	 */
-
 	function shiftCards(fromPile, toPile) {
 	  // Shift off top card from origin pile
 	  const topCard = PILES[fromPile].cards.shift();

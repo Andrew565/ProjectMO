@@ -69,11 +69,11 @@ export const createCommandManager = () => {
     },
   };
 };
+
 /**
  * @param {string} fromPile
  * @param {string} toPile
  */
-
 export function shiftCards(fromPile, toPile) {
   // Shift off top card from origin pile
   const topCard = PILES[fromPile].cards.shift();

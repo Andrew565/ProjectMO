@@ -1269,20 +1269,20 @@
 	}
 
 	// Counts up value of pile's cards, used for royal piles
-	function getPileValue(/** @type {import("./Initializers").MO52Card[]} */ pileCards) {
+	function getPileValue(/** @type {import("./constants").MO52Card[]} */ pileCards) {
 	  return pileCards.reduce((acc, card) => {
 	    return (acc += card.value);
 	  }, 0);
 	}
 
 	// Checks if a royal card is present and face-down
-	/** @param {import("./Initializers").MO52Card[]} pileCards */
+	/** @param {import("./constants").MO52Card[]} pileCards */
 	function checkIfRoyalDefeated(pileCards) {
 	  return pileCards.some((card) => isRoyal(card) && card.facingDown);
 	}
 
 	// Determines which piles are 'legal' targets for drag and drop
-	/** @param {import("./Initializers").MO52Card} card */
+	/** @param {import("./constants").MO52Card} card */
 	function getValidPiles(card) {
 	  let validPiles;
 
@@ -1303,7 +1303,7 @@
 
 	// Function to ascertain where a Royal card can move to
 	/**
-	 * @param {import("./Initializers").MO52Card} card
+	 * @param {import("./constants").MO52Card} card
 	 * @returns {string[]}
 	 */
 	function getValidRoyalPiles(card) {
@@ -1335,7 +1335,7 @@
 	}
 
 	// Function to determine possible matches and match types for Royals to move to
-	/** @param {import("./Initializers").MO52Card} card */
+	/** @param {import("./constants").MO52Card} card */
 	function getRoyalPileMatches(card) {
 	  let validPileMatches = /** @type PileMatch[] */ ([]);
 
@@ -1369,8 +1369,8 @@
 	// Function to check if there is a suit match for the provided pile and card
 	/**
 	 * @param {string} pileID
-	 * @param {import("./Initializers").MO52Card} topNeighbor
-	 * @param {import("./Initializers").MO52Card} card
+	 * @param {import("./constants").MO52Card} topNeighbor
+	 * @param {import("./constants").MO52Card} card
 	 * @returns {PileMatch | null}
 	 */
 	function getSuitMatch(pileID, topNeighbor, card) {
@@ -1382,8 +1382,8 @@
 	// Function to check if there is a color match for the provided pile and card
 	/**
 	 * @param {string} pileID
-	 * @param {import("./Initializers").MO52Card} topNeighbor
-	 * @param {import("./Initializers").MO52Card} card
+	 * @param {import("./constants").MO52Card} topNeighbor
+	 * @param {import("./constants").MO52Card} card
 	 * @returns {PileMatch | null}
 	 */
 	function getColorMatch(pileID, topNeighbor, card) {
@@ -1394,13 +1394,13 @@
 	}
 
 	// Function to check which outer piles might be valid for a given non-royal card
-	/** @param {import("./Initializers").MO52Card} card */
+	/** @param {import("./constants").MO52Card} card */
 	function getValidOuterPiles(card) {
-	  return OuterPileIds.reduce((acc, pileId) => {
-	    const pileCards = /** @type {import("./Initializers").MO52Card[]} */ (PILES[pileId].cards).slice(0);
+	  return OuterPileIds.reduce((acc, pileID) => {
+	    const pileCards = getPileCards(pileID);
 
 	    // Check if empty and return early if so
-	    if (!pileCards) {
+	    if (pileCards.length === 0) {
 	      return acc;
 	    }
 
@@ -1412,7 +1412,7 @@
 	    // Check that the total value won't exceed 21
 	    const pileValue = getPileValue(pileCards);
 	    if (pileValue + card.value < 21) {
-	      acc.push(pileId);
+	      acc.push(pileID);
 	    }
 
 	    return acc;
@@ -1420,7 +1420,7 @@
 	}
 
 	// Function to check which inner piles might be valid for a given card
-	/** @param {import("./Initializers").MO52Card} card */
+	/** @param {import("./constants").MO52Card} card */
 	function getValidInnerPiles(card) {
 	  return InnerPileIds.reduce((acc, pileID) => {
 	    // If an Ace or Joker, add the pileId and return early

@@ -79,7 +79,7 @@ function getRoyalPileMatches(card) {
 
     // Get the nearest neighbor's top card
     const neighborPile = NearestInnerPile[pileID];
-    const topNeighbor = getTopCard(neighborPile);
+    const topNeighbor = /** @type {import("./constants").MO52Card} */ (getTopCard(neighborPile));
 
     // First, check if the current pile makes a suit match with its nearest neighbor
     const suitMatch = getSuitMatch(pileID, topNeighbor, card);
@@ -180,7 +180,7 @@ function getValidInnerPiles(card) {
  * @returns {boolean}
  */
 export function isValidPile(fromPile, toPile) {
-  const card = getTopCard(fromPile);
+  const card = /** @type {import("./constants").MO52Card} */ (getTopCard(fromPile));
   const validPiles = getValidPiles(card);
   const retVal = validPiles.includes(toPile);
   return retVal;

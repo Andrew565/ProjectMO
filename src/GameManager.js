@@ -13,7 +13,7 @@ const DefeatConditions = {
     // First get the total value of the cards to check
     const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
     const cardsToCheckTotal = cardsToCheck.reduce((acc, card) => {
-      acc += card.value;
+      acc += card?.value || 0;
       return acc;
     }, 0);
 
@@ -46,9 +46,9 @@ const DefeatConditions = {
     // Next get the cards to check, filter them, and total their values
     const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
     const cardsToCheckTotal = cardsToCheck
-      .filter((card) => suitColor[card.suit] === neededColor)
+      .filter((card) => card && suitColor[card.suit] === neededColor)
       .reduce((acc, card) => {
-        acc += card.value;
+        acc += card?.value || 0;
         return acc;
       }, 0);
 
@@ -75,9 +75,9 @@ const DefeatConditions = {
     // Next get the cards to check, filter them, and total their values
     const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
     const cardsToCheckTotal = cardsToCheck
-      .filter((card) => card.suit === neededSuit)
+      .filter((card) => card && card.suit === neededSuit)
       .reduce((acc, card) => {
-        acc += card.value;
+        acc += card?.value || 0;
         return acc;
       }, 0);
 
@@ -116,7 +116,7 @@ export const createGameManager = () => {
     // Get all of the outer piles and see if all 12 are face-down
     return OuterPileIds.every((pileId) => {
       const cards = PILES[pileId].cards;
-      return cards && cards.every((card) => card.facingDown);
+      return cards.length && cards.every((card) => card.facingDown);
     });
   }
 
@@ -124,6 +124,9 @@ export const createGameManager = () => {
   function checkIfGameLost() {
     // Get the top card of the draw pile
     const topCard = getTopCard("e5");
+
+    // If no more cards in draw pile then game is lost
+    if (!topCard) return true;
 
     // If 0 validPiles for top card, then game unwinnable
     return getValidPiles(topCard).length === 0;

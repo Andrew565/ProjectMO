@@ -9,6 +9,7 @@ export function getPileCards(pileID) {
   return PILES[pileID].cards;
 }
 
+/** @returns {import("./constants").MO52Card | undefined} */
 export function getTopCard(pileID) {
   return PILES[pileID].cards.slice(0, 1)[0];
 }

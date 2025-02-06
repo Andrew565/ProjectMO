@@ -152,12 +152,40 @@ function getValidOuterPiles(card) {
   }, /** @type {string[]} */ ([]));
 }
 
+// Function to check for "lowest value piles" when looking for valid Joker positions
+/** @returns {string[]} */
+function getValidJokerPiles() {
+  return InnerPileIds.map((pileID) => {
+    const topCard = getTopCard(pileID);
+    return { value: topCard?.value || 99, pileID };
+  })
+    .sort((a, b) => {
+      return a.value - b.value;
+    })
+    .reduce((acc, pileAndValue) => {
+      if (acc.length === 0 && pileAndValue.value < 99) {
+        // Init the accumulator if empty
+        acc.push(pileAndValue);
+      } else if (acc[0].value === pileAndValue.value) {
+        // If two objs have same value, add them
+        acc.push(pileAndValue);
+      } else if (acc[0].value > pileAndValue.value) {
+        // If old value is greater than new value, replace acc with new
+        acc = [pileAndValue];
+      }
+      return acc;
+    }, /** @type {{value: number, pileID: string}[]} */ ([]))
+    .map((obj) => obj.pileID);
+}
+
 // Function to check which inner piles might be valid for a given card
 /** @param {import("./constants").MO52Card} card */
 function getValidInnerPiles(card) {
+  if (card.value === 0) return getValidJokerPiles();
+
   return InnerPileIds.reduce((acc, pileID) => {
-    // If an Ace or Joker, add the pileId and return early
-    if (card.value <= 1) {
+    // If an Ace add the pileId and return early
+    if (card.value === 1) {
       acc.push(pileID);
     } else {
       // Get top card, if any

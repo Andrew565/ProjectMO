@@ -3,6 +3,7 @@
 Roughly in order of priority.
 
 - TODO: Improve the game over alerts, maybe use a popup?
+- TODO: Better card back to make face-down cards more obvious
 - TODO: Improve display of armor to make it more visible and obvious
 - TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
 - TODO: Add a more "interactive" tutorial

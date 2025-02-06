@@ -1040,6 +1040,7 @@
 	  return PILES[pileID].cards;
 	}
 
+	/** @returns {import("./constants").MO52Card | undefined} */
 	function getTopCard(pileID) {
 	  return PILES[pileID].cards.slice(0, 1)[0];
 	}
@@ -1346,7 +1347,7 @@
 
 	    // Get the nearest neighbor's top card
 	    const neighborPile = NearestInnerPile[pileID];
-	    const topNeighbor = getTopCard(neighborPile);
+	    const topNeighbor = /** @type {import("./constants").MO52Card} */ (getTopCard(neighborPile));
 
 	    // First, check if the current pile makes a suit match with its nearest neighbor
 	    const suitMatch = getSuitMatch(pileID, topNeighbor, card);
@@ -1419,12 +1420,40 @@
 	  }, /** @type {string[]} */ ([]));
 	}
 
+	// Function to check for "lowest value piles" when looking for valid Joker positions
+	/** @returns {string[]} */
+	function getValidJokerPiles() {
+	  return InnerPileIds.map((pileID) => {
+	    const topCard = getTopCard(pileID);
+	    return { value: topCard?.value || 99, pileID };
+	  })
+	    .sort((a, b) => {
+	      return a.value - b.value;
+	    })
+	    .reduce((acc, pileAndValue) => {
+	      if (acc.length === 0 && pileAndValue.value < 99) {
+	        // Init the accumulator if empty
+	        acc.push(pileAndValue);
+	      } else if (acc[0].value === pileAndValue.value) {
+	        // If two objs have same value, add them
+	        acc.push(pileAndValue);
+	      } else if (acc[0].value > pileAndValue.value) {
+	        // If old value is greater than new value, replace acc with new
+	        acc = [pileAndValue];
+	      }
+	      return acc;
+	    }, /** @type {{value: number, pileID: string}[]} */ ([]))
+	    .map((obj) => obj.pileID);
+	}
+
 	// Function to check which inner piles might be valid for a given card
 	/** @param {import("./constants").MO52Card} card */
 	function getValidInnerPiles(card) {
+	  if (card.value === 0) return getValidJokerPiles();
+
 	  return InnerPileIds.reduce((acc, pileID) => {
-	    // If an Ace or Joker, add the pileId and return early
-	    if (card.value <= 1) {
+	    // If an Ace add the pileId and return early
+	    if (card.value === 1) {
 	      acc.push(pileID);
 	    } else {
 	      // Get top card, if any
@@ -1447,7 +1476,7 @@
 	 * @returns {boolean}
 	 */
 	function isValidPile(fromPile, toPile) {
-	  const card = getTopCard(fromPile);
+	  const card = /** @type {import("./constants").MO52Card} */ (getTopCard(fromPile));
 	  const validPiles = getValidPiles(card);
 	  const retVal = validPiles.includes(toPile);
 	  return retVal;
@@ -1464,7 +1493,7 @@
 	    // First get the total value of the cards to check
 	    const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
 	    const cardsToCheckTotal = cardsToCheck.reduce((acc, card) => {
-	      acc += card.value;
+	      acc += card?.value || 0;
 	      return acc;
 	    }, 0);
 
@@ -1497,9 +1526,9 @@
 	    // Next get the cards to check, filter them, and total their values
 	    const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
 	    const cardsToCheckTotal = cardsToCheck
-	      .filter((card) => suitColor[card.suit] === neededColor)
+	      .filter((card) => card && suitColor[card.suit] === neededColor)
 	      .reduce((acc, card) => {
-	        acc += card.value;
+	        acc += card?.value || 0;
 	        return acc;
 	      }, 0);
 
@@ -1526,9 +1555,9 @@
 	    // Next get the cards to check, filter them, and total their values
 	    const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
 	    const cardsToCheckTotal = cardsToCheck
-	      .filter((card) => card.suit === neededSuit)
+	      .filter((card) => card && card.suit === neededSuit)
 	      .reduce((acc, card) => {
-	        acc += card.value;
+	        acc += card?.value || 0;
 	        return acc;
 	      }, 0);
 
@@ -1566,8 +1595,8 @@
 	  function checkIfGameWon() {
 	    // Get all of the outer piles and see if all 12 are face-down
 	    return OuterPileIds.every((pileId) => {
-	      const cards = PILES[pileId].cards;
-	      return cards && cards.every((card) => card.facingDown);
+	      const cards = getPileCards(pileId);
+	      return cards.length > 0 && cards.every((card) => card.facingDown);
 	    });
 	  }
 
@@ -1575,6 +1604,9 @@
 	  function checkIfGameLost() {
 	    // Get the top card of the draw pile
 	    const topCard = getTopCard("e5");
+
+	    // If no more cards in draw pile then game is lost
+	    if (!topCard) return true;
 
 	    // If 0 validPiles for top card, then game unwinnable
 	    return getValidPiles(topCard).length === 0;

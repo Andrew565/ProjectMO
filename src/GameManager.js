@@ -115,8 +115,8 @@ export const createGameManager = () => {
   function checkIfGameWon() {
     // Get all of the outer piles and see if all 12 are face-down
     return OuterPileIds.every((pileId) => {
-      const cards = PILES[pileId].cards;
-      return cards.length && cards.every((card) => card.facingDown);
+      const cards = getPileCards(pileId);
+      return cards.length > 0 && cards.every((card) => card.facingDown);
     });
   }
 

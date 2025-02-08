@@ -147,6 +147,11 @@ export const createGameManager = () => {
       gameWon = checkIfGameWon();
       if (gameWon) {
         console.log("YOU WIN!");
+        const gameWonDialog = /** @type {HTMLDialogElement} */ (document.getElementById("gameWonDialog"));
+        gameWonDialog.showModal();
+        gameWonDialog.querySelector("#gameWonCloseButton")?.addEventListener("click", () => {
+          gameWonDialog.close();
+        });
         return;
       }
 
@@ -154,6 +159,11 @@ export const createGameManager = () => {
       gameLost = checkIfGameLost();
       if (gameLost) {
         console.log("GAME OVER, YOU HAVE LOST");
+        const gameLostDialog = /** @type {HTMLDialogElement} */ (document.getElementById("gameLostDialog"));
+        gameLostDialog.showModal();
+        gameLostDialog.querySelector("#gameLostCloseButton")?.addEventListener("click", () => {
+          gameLostDialog.close();
+        });
       }
     },
   };

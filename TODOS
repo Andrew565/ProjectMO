@@ -2,8 +2,7 @@
 
 Roughly in order of priority.
 
-- FIXME: Show armor better for the skinny piles (top and bottom)
 - TODO: Better card back to make face-down cards more obvious
-- TODO: Improve display of armor to make it more visible and obvious
 - TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
 - TODO: Add a more "interactive" tutorial
+- TODO: Add local statistics (be sure to include a reset button, attempts, wins, and losses)

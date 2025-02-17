@@ -2,7 +2,13 @@
 
 Roughly in order of priority.
 
+- FIXME: Investigate if the "run out of cards" game over scenario is properly handled
+- FIXME: Investigate if starting a new game after running out of cards is working properly (collecting all of the cards into the drawpile might not work right if the draw pile is empty?)
+- FIXME: Starting a new game with the "start new game" button doesn't reset the cards quite right. Need to turn everything face down I think
+- TODO: Improve the Rules to make "triggering" more obvious
+- TODO: Improve the Rules to make same-color and same-suit more obvious
 - TODO: Better card back to make face-down cards more obvious
 - TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
+- TODO: Create an "easy mode" that ignores the same suit and same color rules?
 - TODO: Add a more "interactive" tutorial
 - TODO: Add local statistics (be sure to include a reset button, attempts, wins, and losses)

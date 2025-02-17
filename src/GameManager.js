@@ -137,8 +137,9 @@ export const createGameManager = () => {
 
   return {
     tick: (toPile) => {
-      // Skip checks if toPile is an Outer pile
-      if (OuterPileIds.includes(toPile)) return;
+      // Skip checks if toPile is an Outer pile and there are still cards in the draw pile
+      const drawPile = getPileCards("e5");
+      if (OuterPileIds.includes(toPile) && drawPile.length) return;
 
       // Check if any Royals were defeated in the last shift
       checkIfRoyalsDefeated(toPile);

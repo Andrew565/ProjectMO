@@ -5,6 +5,7 @@ export function collectAndShuffleCards() {
   Object.entries(PILES).forEach(([pileId, { cards }]) => {
     if (pileId !== "e5") {
       const pileCards = cards.splice(0);
+      pileCards.forEach((card) => (card.facingDown = true));
       moDeck.addToDrawPile(pileCards);
     }
   });

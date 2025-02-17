@@ -72,7 +72,7 @@ const drake = dragula(pileEls, {
 drake.on("drag", function (_, source) {
   // Grab a copy of the top card from the source pile
   const card = getTopCard(source.id);
-  const validPiles = getValidPiles(card);
+  const validPiles = card ? getValidPiles(card) : [];
 
   if (validPiles.length) {
     highlightValidPiles(validPiles);

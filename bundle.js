@@ -1054,6 +1054,7 @@
 	  Object.entries(PILES).forEach(([pileId, { cards }]) => {
 	    if (pileId !== "e5") {
 	      const pileCards = cards.splice(0);
+	      pileCards.forEach((card) => (card.facingDown = true));
 	      moDeck.addToDrawPile(pileCards);
 	    }
 	  });
@@ -1617,8 +1618,9 @@
 
 	  return {
 	    tick: (toPile) => {
-	      // Skip checks if toPile is an Outer pile
-	      if (OuterPileIds.includes(toPile)) return;
+	      // Skip checks if toPile is an Outer pile and there are still cards in the draw pile
+	      const drawPile = getPileCards("e5");
+	      if (OuterPileIds.includes(toPile) && drawPile.length) return;
 
 	      // Check if any Royals were defeated in the last shift
 	      checkIfRoyalsDefeated(toPile);
@@ -1715,7 +1717,7 @@
 	drake.on("drag", function (_, source) {
 	  // Grab a copy of the top card from the source pile
 	  const card = getTopCard(source.id);
-	  const validPiles = getValidPiles(card);
+	  const validPiles = card ? getValidPiles(card) : [];
 
 	  if (validPiles.length) {
 	    highlightValidPiles(validPiles);

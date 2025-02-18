@@ -4,8 +4,10 @@ Roughly in order of priority.
 
 - TODO: Better card back to make face-down cards more obvious
 - TODO: Improve the "You Lost!" message to make it more clear "why" the player lost (no more room for armor or ran out of cards)
+- TODO: Add language to the rules about dragging and dropping and where to find the draw pile
 - TODO: Add graphics to the rules
 - TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
 - TODO: Create an "easy mode" that ignores the same suit and same color rules?
 - TODO: Add a more "interactive" tutorial
+- TODO: Make the game keyboard accessible
 - TODO: Add local statistics (be sure to include a reset button, attempts, wins, and losses)

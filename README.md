@@ -1,4 +1,4 @@
-A modern solitaire game based on Matrix Overload.
+A modern solitaire game based on [Matrix Overload](https://notwriting.itch.io/matrix-overload), which itself was based on [Gridcannon](https://www.pentadact.com/2019-08-20-gridcannon-a-single-player-game-with-regular-playing-cards/).
 
 Made using vanilla/plain JavaScript, vanilla/plain CSS, and vanilla/plain HTML (notice a theme perhaps?). Uses Rollup for bundling the JavaScript (`npm run build` or `npm run watch`).
 

@@ -1,4 +1,4 @@
-import { PILES, InnerPileIds } from "./constants";
+import { PILES, InnerPileIds, suitColor } from "./constants";
 
 // Get card templates for making cards
 export const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
@@ -34,6 +34,10 @@ function makeFaceUpCard(chosenCard, index) {
   setElInnerHTML(faceUpCard, ".mo-card__rank", chosenCard.initial);
   setElInnerHTML(faceUpCard, ".mo-card__suit", chosenCard.suit);
   setElInnerHTML(faceUpCard, ".mo-card__name", chosenCard.name);
+
+  if (suitColor[chosenCard.suit] === "Red") {
+    faceUpCard.querySelector(".mo-card__suit")?.classList.add("red");
+  }
 
   return faceUpCard;
 }

@@ -44,9 +44,9 @@ const BaseCards = /** @type MO52Card[] */ (StandardCards.standard52DeckOfCards).
   }
 
   // Rename 10 to X so it centers better
-  if (card.initial === "10") {
-    card.initial = "X";
-  }
+  // if (card.initial === "10") {
+  //   card.initial = "X";
+  // }
 
   // Setup suit icons
   card.suit = suitIcons[card.suit[0]];

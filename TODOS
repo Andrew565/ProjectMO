@@ -2,6 +2,9 @@
 
 Roughly in order of priority.
 
+- TODO: Make all the updates I can do incorporate MO's theme
+  - Improve the Rules
+  - Improve styles
 - TODO: Better card back to make face-down cards more obvious
 - TODO: Improve the "You Lost!" message to make it more clear "why" the player lost (no more room for armor or ran out of cards)
 - TODO: Add graphics to the rules
@@ -10,3 +13,4 @@ Roughly in order of priority.
 - TODO: Add a more "interactive" tutorial
 - TODO: Make the game keyboard accessible
 - TODO: Add local statistics (be sure to include a reset button, attempts, wins, and losses)
+- TODO: Add "Cybermancy" rules?

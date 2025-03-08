@@ -1,9 +1,15 @@
 :root {
-  --cerulean: #007ea7ff;
   --aquamarine: #1affd5ff;
+  --cerulean: #007ea7ff;
   --black: #090909ff;
   --french-gray: #b8b3beff;
+  --neon-green: #0eff0c;
   --ultra-pink: rgb(208, 117, 213);
+  --text-color-main: var(--french-gray);
+  --text-color-cards: var(--french-gray);
+  --background-color: var(--black);
+  --card-background-color: var(--black);
+  --heading-color: var(--neon-green);
 }
 
 * {
@@ -11,13 +17,16 @@
 }
 
 body {
-  font-family: sans-serif;
-  color: var(--black);
-  background-color: var(--french-gray);
+  font-family: "Source Code Pro", monospace;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  color: var(--text-color-main);
+  background-color: var(--background-color);
 }
 
 h1 {
-  color: var(--cerulean);
+  color: var(--heading-color);
 }
 
 details {
@@ -49,7 +58,8 @@ details {
 }
 
 .pile {
-  background-color: var(--cerulean);
+  background-color: var(--black);
+  border: 1px solid var(--french-gray);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,11 +68,11 @@ details {
 }
 
 .pile--valid {
-  background-color: var(--ultra-pink);
+  background-color: var(--neon-green);
 }
 
 .pile--drawpile {
-  background-color: var(--ultra-pink);
+  background-color: var(--neon-green);
   border: 2px solid var(--cerulean);
 }
 
@@ -71,8 +81,8 @@ details {
 }
 
 .mo-card {
-  background-color: var(--french-gray);
-  border: 1px solid var(--black);
+  background-color: var(--card-background-color);
+  border: 1px solid var(--french-gray);
   border-radius: 5px;
   height: 100px;
   width: 70px;
@@ -97,12 +107,25 @@ details {
 }
 
 .mo-card .mo-card__corner {
-  padding: 0.25em;
-  font-size: larger;
+  font-size: 2em;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .mo-card .mo-card__rank {
-  padding-left: 3px;
+  color: var(--text-color-cards);
+  padding-left: 0px;
+}
+
+.mo-card .mo-card__suit {
+  color: var(--text-color-cards);
+}
+
+.mo-card .mo-card__suit.red {
+  color: red;
 }
 
 .mo-card .mo-card__name {

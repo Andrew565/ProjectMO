@@ -120,16 +120,24 @@ export const createGameManager = () => {
     });
   }
 
+  let lostReason = "";
+
   /** @returns {Boolean} */
   function checkIfGameLost() {
     // Get the top card of the draw pile
     const topCard = getTopCard("e5");
 
     // If no more cards in draw pile then game is lost
-    if (!topCard) return true;
+    if (!topCard) {
+      lostReason = "No more cards in draw pile.";
+      return true;
+    }
 
     // If 0 validPiles for top card, then game unwinnable
-    return getValidPiles(topCard).length === 0;
+    if (getValidPiles(topCard).length === 0) {
+      lostReason = "No valid place to play card.";
+      return true;
+    }
   }
 
   let gameWon = false;
@@ -159,8 +167,9 @@ export const createGameManager = () => {
       // Lastly, check if the game has entered a "no win" situation
       gameLost = checkIfGameLost();
       if (gameLost) {
-        console.log("GAME OVER, YOU HAVE LOST");
         const gameLostDialog = /** @type {HTMLDialogElement} */ (document.getElementById("gameLostDialog"));
+        const gameLostReasonEl = gameLostDialog.querySelector("#gameLostReason");
+        if (gameLostReasonEl) gameLostReasonEl.innerHTML = lostReason;
         gameLostDialog.showModal();
         gameLostDialog.querySelector("#gameLostCloseButton")?.addEventListener("click", () => {
           gameLostDialog.close();

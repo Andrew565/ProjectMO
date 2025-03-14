@@ -29,6 +29,10 @@ h1 {
   color: var(--heading-color);
 }
 
+a {
+  color: var(--neon-green);
+}
+
 details {
   margin-bottom: 1em;
 }
@@ -100,6 +104,13 @@ details {
 
 .mo-card.mo-card--empty:not(:only-child) {
   display: none;
+}
+
+.mo-card .mo-card__back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
 }
 
 .mo-card .mo-card__placeholder {

@@ -42,10 +42,14 @@ function makeFaceUpCard(chosenCard, index) {
   return faceUpCard;
 }
 /** @param {number} index */
-function makeFaceDownCard(index) {
+function makeFaceDownCard(index, dead) {
   const faceDownCard = /** @type {HTMLElement} */ (faceDownTemplate?.content.cloneNode(true));
   const fdCardEl = faceDownCard.querySelector(".mo-card");
   if (fdCardEl) fdCardEl.setAttribute("style", `--index: ${index}`);
+  if (fdCardEl && dead) {
+    const cardBack = fdCardEl.querySelector(".mo-card__back");
+    if (cardBack) cardBack.textContent = "Dead";
+  }
   return faceDownCard;
 }
 /** @param {number} index */
@@ -65,7 +69,8 @@ export function renderCards() {
     // Make card elements
     const cardEls = cardsClone.map((card, index) => {
       if (card.facingDown) {
-        return makeFaceDownCard(index);
+        const dead = pileName !== "e5";
+        return makeFaceDownCard(index, dead);
       } else {
         // Set the index to 99 for the top card of draw pile
         if (pileName === "e5") index = 99;

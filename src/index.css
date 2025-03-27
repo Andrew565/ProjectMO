@@ -2,13 +2,15 @@
   --aquamarine: #1affd5ff;
   --cerulean: #007ea7ff;
   --black: #090909ff;
+  --light-black: #444;
   --french-gray: #b8b3beff;
   --neon-green: #0eff0c;
   --ultra-pink: rgb(208, 117, 213);
+  --white: #eee;
   --text-color-main: var(--french-gray);
-  --text-color-cards: var(--french-gray);
+  --text-color-cards: var(--white);
   --background-color: var(--black);
-  --card-background-color: var(--black);
+  --card-background-color: var(--light-black);
   --heading-color: var(--neon-green);
 }
 
@@ -76,7 +78,7 @@ details {
 }
 
 .pile--drawpile {
-  background-color: var(--neon-green);
+  background-color: var(--aquamarine);
   border: 2px solid var(--cerulean);
 }
 

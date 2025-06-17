@@ -1,7 +1,7 @@
 import { collectAndShuffleCards, dealOutInitialCards } from "./Initializers";
 import { createCommandManager } from "./CommandManager";
 import { renderCards } from "./Renderers";
-import { isValidPile, getValidPiles } from "./Validators";
+import { getValidPiles } from "./Validators";
 import { getTopCard } from "./Helpers";
 import { createGameManager } from "./GameManager";
 
@@ -26,7 +26,7 @@ function newGame() {
   // Deal cards out to central piles
   dealOutInitialCards();
 
-  // Lastly, render the current state of the piles
+  // Render the current state of the piles
   renderCards();
 
   // Highlight valid moves for the card in the draw pile
@@ -40,13 +40,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // Setup click listeners for card placement
   const pileElements = Array.from(document.getElementsByClassName("pile"));
   pileElements.forEach(pileEl => {
-    if (pileEl.id !== "e5") { // Only add listeners to non-draw piles
+    if (pileEl.id !== "e5") { // Don't add click listener to the draw pile
       pileEl.addEventListener("click", function() {
+        // When a pile is clicked, check if it's a valid target for the top card of the draw pile
         const targetPileId = pileEl.id;
         if (pileEl.classList.contains("pile--valid")) {
+          // If valid, execute the move
           CommandManager.doShift("e5", targetPileId);
+
+          // Call GameManager.tick to check for game win/loss conditions
           GameManager.tick(targetPileId);
+
+          // Render the updated state of the piles
           renderCards();
+
+          // Highlight valid piles for the next draw pile card
           highlightValidPilesForDrawPile();
         }
       });

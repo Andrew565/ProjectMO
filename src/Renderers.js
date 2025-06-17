@@ -3,7 +3,6 @@ import { PILES, InnerPileIds, suitColor } from "./constants";
 // Get card templates for making cards
 export const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));
 export const faceDownTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceDownCardTemplate"));
-export const emptyTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("emptyCardTemplate"));
 
 /**
  * @param {import("./constants").MO52Card} chosenCard
@@ -41,24 +40,24 @@ function makeFaceUpCard(chosenCard, index) {
 
   return faceUpCard;
 }
+
 /** @param {number} index */
-function makeFaceDownCard(index, dead) {
+function makeFaceDownCard(index) {
   const faceDownCard = /** @type {HTMLElement} */ (faceDownTemplate?.content.cloneNode(true));
   const fdCardEl = faceDownCard.querySelector(".mo-card");
-  if (fdCardEl) fdCardEl.setAttribute("style", `--index: ${index}`);
-  if (fdCardEl && dead) {
+
+  if (fdCardEl) {
+    // Set the index
+    fdCardEl.setAttribute("style", `--index: ${index}`);
+
+    // Label the card as "Dead"
     const cardBack = fdCardEl.querySelector(".mo-card__back");
     if (cardBack) cardBack.textContent = "Dead";
   }
+
   return faceDownCard;
 }
-/** @param {number} index */
-function makeEmptyCard(index) {
-  const emptyCard = /** @type {HTMLElement} */ (emptyTemplate?.content.cloneNode(true));
-  const emptyCardEl = emptyCard.querySelector(".mo-card");
-  if (emptyCardEl) emptyCardEl.setAttribute("style", `--index: ${index}`);
-  return emptyCard;
-}
+
 export function renderCards() {
   Object.entries(PILES).forEach(([pileName, { cards }]) => {
     const cardsClone = Array.from(cards);
@@ -69,8 +68,7 @@ export function renderCards() {
     // Make card elements
     const cardEls = cardsClone.map((card, index) => {
       if (card.facingDown) {
-        const dead = pileName !== "e5";
-        return makeFaceDownCard(index, dead);
+        return makeFaceDownCard(index);
       } else {
         // Set the index to 99 for the top card of draw pile
         if (pileName === "e5") index = 99;
@@ -78,11 +76,6 @@ export function renderCards() {
         return makeFaceUpCard(card, index);
       }
     });
-
-    // Add an empty card to the bottom of the pile (makes drag n drop easier)
-    const nextIndex = cardEls.length;
-    const emptyCard = makeEmptyCard(nextIndex);
-    cardEls.push(emptyCard);
 
     // Next, append cards to pile
     const pileEl = document.querySelector(`#${pileName}.pile`);

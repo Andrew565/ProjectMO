@@ -6,7 +6,10 @@
     <title>MATR1X 0VERL0AD</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
     <link href="./src/index.css" rel="stylesheet" type="text/css" />
   </head>
   <body>
@@ -16,82 +19,108 @@
         <summary>Instructions and Rules</summary>
         <p>
           This game is based on the physical card game
-          <a href="https://notwriting.itch.io/matrix-overload">MATR1X 0VERL0AD by Michael Elliot</a>, which itself was
-          based on
-          <a href="https://www.pentadact.com/2019-08-20-gridcannon-a-single-player-game-with-regular-playing-cards/"
+          <a href="https://notwriting.itch.io/matrix-overload"
+            >MATR1X 0VERL0AD by Michael Elliot</a
+          >, which itself was based on
+          <a
+            href="https://www.pentadact.com/2019-08-20-gridcannon-a-single-player-game-with-regular-playing-cards/"
             >Gridcannon</a
           >
-          by Tom Francis. This digital version was created by <a href="https://andrew565.github.io/">Andrew Steele</a>.
+          by Tom Francis. This digital version was created by
+          <a href="https://andrew565.github.io/">Andrew Steele</a>.
         </p>
         <p>
-          <a href="assets/Matrix-Overload.pdf">The original version of these rules can be found here</a> (published with
-          permission). If you enjoy this game, please consider supporting the original creator by visiting his
-          <a href="https://www.patreon.com/notwriting">patreon</a>, or consider sending me a
+          <a href="assets/Matrix-Overload.pdf"
+            >The original version of these rules can be found here</a
+          >
+          (published with permission). If you enjoy this game, please consider
+          supporting the original creator by visiting his
+          <a href="https://www.patreon.com/notwriting">patreon</a>, or consider
+          sending me a
           <a href="https://ko-fi.com/andrewthecreator">donation</a>!
         </p>
         <p>
-          The goal of this game is to defeat the Royal cards (Jacks, Queens, Kings) before they become too powerful to
-          beat, and before you run out of cards to play against them. The draw pile can be found in the lower right
-          corner. Valid moves for the top card of the draw pile are automatically highlighted. Click a highlighted pile to move the card there.
+          The goal of this game is to defeat the Royal cards (Jacks, Queens,
+          Kings) before they become too powerful to beat, and before you run out
+          of cards to play against them. The draw pile can be found in the lower
+          right corner. Valid moves for the top card of the draw pile are
+          automatically highlighted. Click a highlighted pile to move the card
+          there.
         </p>
         <p>
-          To play, you must line up cards in rows or columns in order to defeat the royal cards. The game engine will
-          automatically highlight valid placements for you. The value of the two cards closest to the royal's row or
-          column must add up to the value of the royal or higher, and then be "triggered" to attack by placing a valid
-          card in the third, farthest-away pile (see example below). A Jack can be beaten with any two cards adding up
-          to at least 11 points, a Queen requires at least 12 points and the cards must be of the same color as the
-          Queen, and a King must be beaten with two same-suited cards adding up to at least 13 points.
+          To play, you must line up cards in rows or columns in order to defeat
+          the royal cards. The game engine will automatically highlight valid
+          placements for you. The value of the two cards closest to the royal's
+          row or column must add up to the value of the royal or higher, and
+          then be "triggered" to attack by placing a valid card in the third,
+          farthest-away pile (see example below). A Jack can be beaten with any
+          two cards adding up to at least 11 points, a Queen requires at least
+          12 points and the cards must be of the same color as the Queen, and a
+          King must be beaten with two same-suited cards adding up to at least
+          13 points.
         </p>
         <p>
-          For example, if you have a row with a 3, a 10, a 7, and a Jack on the end, the 10 and 7 add up to 17 points,
-          which is enough to beat the Jack. Placing any valid card on top of the 3 will "trigger" the other cards,
-          causing the Jack to be defeated and flipped face-down. If the royal at the end of the row was a Queen of
-          Hearts, then the 10 and 7 would both need to be either a Heart or a Diamond (red colored suits). If the royal
-          at the end was a King of Spades, then the 10 and 7 would both need to be Spades as well (same suit).
+          For example, if you have a row with a 3, a 10, a 7, and a Jack on the
+          end, the 10 and 7 add up to 17 points, which is enough to beat the
+          Jack. Placing any valid card on top of the 3 will "trigger" the other
+          cards, causing the Jack to be defeated and flipped face-down. If the
+          royal at the end of the row was a Queen of Hearts, then the 10 and 7
+          would both need to be either a Heart or a Diamond (red colored suits).
+          If the royal at the end was a King of Spades, then the 10 and 7 would
+          both need to be Spades as well (same suit).
         </p>
         <p>
-          When you draw a Royal, they get placed in one of the outer piles. The game engine will automatically highlight
-          valid placements. They should be placed next to the highest-value same-suited card, if a place is available.
-          If no same-suited space is available, then the highest same-color space should be chosen. If no same-color
-          space is available, then the royal should be placed next to the highest card with an open spot. If two spots
-          are open (like on a corner), you may choose either of the two places.
+          When you draw a Royal, they get placed in one of the outer piles. The
+          game engine will automatically highlight valid placements. They should
+          be placed next to the highest-value same-suited card, if a place is
+          available. If no same-suited space is available, then the highest
+          same-color space should be chosen. If no same-color space is
+          available, then the royal should be placed next to the highest card
+          with an open spot. If two spots are open (like on a corner), you may
+          choose either of the two places.
         </p>
         <p>
-          Cards from Ace to 10 and a single Joker are placed on the nine inner piles, and can only be placed on piles
-          where the top card is the same value or lower than the card to be placed. For example, a 7 can be placed on
-          top of anything from an Ace through a 7, but not on an 8, 9, or 10.
+          Cards from Ace to 10 and a single Joker are placed on the nine inner
+          piles, and can only be placed on piles where the top card is the same
+          value or lower than the card to be placed. For example, a 7 can be
+          placed on top of anything from an Ace through a 7, but not on an 8, 9,
+          or 10.
         </p>
         <p>
-          If a 'number' card cannot be placed on an inner pile, it must be added to a royal as 'armor'. For example, if
-          there is no valid place in the inner piles to add a 2, you would then add it to a Jack, Queen, or King, which
-          would increase that royal's difficulty to defeat by two points. A Jack with a 2 would require 13 points to
-          defeat instead of 11. The normal rules about suits and/or color requirements remain the same.
+          If a 'number' card cannot be placed on an inner pile, it must be added
+          to a royal as 'armor'. For example, if there is no valid place in the
+          inner piles to add a 2, you would then add it to a Jack, Queen, or
+          King, which would increase that royal's difficulty to defeat by two
+          points. A Jack with a 2 would require 13 points to defeat instead of
+          11. The normal rules about suits and/or color requirements remain the
+          same.
         </p>
         <p>
-          The exception to the normal gameplay rules comes when you have an Ace or a Joker. Aces can be played on any
-          pile and 'reset' the pile, causing all of the cards in that pile to move to the bottom of the draw pile.
-          Jokers also reset, but must be placed on the lowest-value pile at the time they are drawn. Again, the game
-          engine will automatically highlight valid placements of these cards for you.
+          The exception to the normal gameplay rules comes when you have an Ace
+          or a Joker. Aces can be played on any pile and 'reset' the pile,
+          causing all of the cards in that pile to move to the bottom of the
+          draw pile. Jokers also reset, but must be placed on the lowest-value
+          pile at the time they are drawn. Again, the game engine will
+          automatically highlight valid placements of these cards for you.
         </p>
       </details>
-      <p>
-        Like this game? Please support me with a <a href="https://ko-fi.com/andrewthecreator">ko-fi</a>, and/or support
-        the original creator on <a href="https://www.patreon.com/notwriting">patreon</a>!
-      </p>
     </header>
 
     <section id="gameEndPopups">
       <dialog id="gameWonDialog">
         <h1>You Won!</h1>
-        <p>Congratulations! Click or tap the close button below to go back to your game and start a new one!</p>
+        <p>
+          Congratulations! Click or tap the close button below to go back to
+          your game and start a new one!
+        </p>
         <button id="gameWonCloseButton">Close</button>
       </dialog>
       <dialog id="gameLostDialog">
         <h1>You Lost!</h1>
         <p>Reason: <span id="gameLostReason"></span></p>
         <p>
-          Sorry! Click or tap the close button below to go back to your game, undo a few moves and try again, or just
-          start a new game!
+          Sorry! Click or tap the close button below to go back to your game,
+          undo a few moves and try again, or just start a new game!
         </p>
         <button id="gameLostCloseButton">Close</button>
       </dialog>
@@ -130,6 +159,15 @@
       <div id="d5" class="pile pile--outer"></div>
       <div id="e5" class="pile pile--drawpile"></div>
     </main>
+
+    <footer>
+      <p>
+        Like this game? Please support me with a
+        <a href="https://ko-fi.com/andrewthecreator">ko-fi</a>, and/or support
+        the original creator on
+        <a href="https://www.patreon.com/notwriting">patreon</a>!
+      </p>
+    </footer>
 
     <template id="faceUpCardTemplate">
       <div class="mo-card mo-card--face-up">

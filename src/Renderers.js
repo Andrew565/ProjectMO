@@ -1,4 +1,4 @@
-import { PILES, InnerPileIds, suitColor } from "./constants";
+import { PILES, InnerPileIds, suitColor, suitIcons } from "./constants";
 
 // Get card templates for making cards
 export const faceUpTemplate = /** @type {HTMLTemplateElement} */ (document.getElementById("faceUpCardTemplate"));

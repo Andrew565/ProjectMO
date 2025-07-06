@@ -1,5 +1,5 @@
-import { PILES, replacePiles } from "./constants";
-import { getTopCard } from "./Helpers";
+import { OuterPileIds, PILES, replacePiles } from "./constants";
+import { getTopCard, isRoyal } from "./Helpers";
 import { renderCards } from "./Renderers";
 
 // Function to create commandManagers, should be one per game to manage history (undo/redo)
@@ -92,5 +92,15 @@ export function shiftCards(fromPile, toPile) {
 
     // Shift on the top card to the top of the "To" pile
     PILES[toPile].cards.unshift(topCard);
+
+    // If the toPile is an outer pile, add the value of the new card to the top royal
+    if (OuterPileIds.includes(toPile)) {
+      PILES[toPile].cards.forEach((card) => {
+        if (isRoyal(card) && !isRoyal(topCard)) {
+          const newValue = Number(card.initial) + topCard.value;
+          card.initial = String(newValue);
+        }
+      });
+    }
   }
 }

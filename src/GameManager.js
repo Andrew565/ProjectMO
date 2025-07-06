@@ -1,4 +1,4 @@
-import { OuterPileIds, PILES, RoyalUnits, suitColor } from "./constants";
+import { OuterPileIds, RoyalUnits, suitColor } from "./constants";
 import { getPileCards, getRoyalCard, getTopCard } from "./Helpers";
 import { getValidPiles } from "./Validators";
 
@@ -9,7 +9,7 @@ import { getValidPiles } from "./Validators";
 /** @type {{[x: string]: DefeatCondition}} */
 const DefeatConditions = {
   // Jack Defeat Condition == total value >= 11 plus armor
-  J: function (pileIDsToCheck, cardsToBeat) {
+  Jack: function (pileIDsToCheck, cardsToBeat) {
     // First get the total value of the cards to check
     const cardsToCheck = pileIDsToCheck.map((pileID) => getTopCard(pileID));
     const cardsToCheckTotal = cardsToCheck.reduce((acc, card) => {
@@ -27,7 +27,7 @@ const DefeatConditions = {
     return cardsToCheckTotal >= cardsToBeatTotal;
   },
   // Queen Defeat Condition == total value of same color is >= 12 plus armor
-  Q: function (pileIDsToCheck, cardsToBeat) {
+  Queen: function (pileIDsToCheck, cardsToBeat) {
     // First get the royal pile and the royal card specifically so we can check for the needed color
     const royalCard = getRoyalCard(cardsToBeat);
 
@@ -56,7 +56,7 @@ const DefeatConditions = {
     return cardsToCheckTotal >= cardsToBeatTotal;
   },
   // King Defeat Condition == total value of same suit is >= 13 plus armor
-  K: function (pileIDsToCheck, cardsToBeat) {
+  King: function (pileIDsToCheck, cardsToBeat) {
     // First get the royal pile and the royal card specifically so we can check for the needed color
     const royalCard = getRoyalCard(cardsToBeat);
 
@@ -102,7 +102,7 @@ export const createGameManager = () => {
       const royalPile = getPileCards(unit.royalPile);
       const royalCard = getRoyalCard(royalPile);
       if (royalCard) {
-        const defeated = DefeatConditions[royalCard.initial](unit.cardsToCheck, royalPile);
+        const defeated = DefeatConditions[royalCard.nameRank](unit.cardsToCheck, royalPile);
         if (defeated) {
           // If royal defeated, flip its pile face down
           royalPile.forEach((card) => (card.facingDown = true));
@@ -138,6 +138,8 @@ export const createGameManager = () => {
       lostReason = "No valid place to play card.";
       return true;
     }
+
+    return false;
   }
 
   let gameWon = false;

@@ -8,5 +8,5 @@ export default {
     file: "bundle.js",
     format: "iife",
   },
-  plugins: [nodeResolve(), commonjs(), terser()],
+  plugins: [nodeResolve(), commonjs()],
 };

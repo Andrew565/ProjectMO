@@ -15,11 +15,12 @@ import { DeckOfCards, StandardCards } from "@andrewscripts/deck-of-cards.js";
  */
 
 export const suitIcons = {
-  C: "♣️",
-  H: "❤️",
-  S: "♠️",
-  D: "♦️",
-  J: "🤪",
+  C: "♣",
+  H: "♥",
+  S: "♠",
+  D: "♦",
+  J: "☹︎", // Joker
+  any: "★"
 };
 
 // Suit colors for when suit is not a match
@@ -29,6 +30,8 @@ export const suitColor = {
   [suitIcons["H"]]: "Red",
   [suitIcons["S"]]: "Black",
   [suitIcons["D"]]: "Red",
+  [suitIcons["C"] + suitIcons["S"]]: "Black", // Clubs and Spades
+  [suitIcons["H"] + suitIcons["D"]]: "Red", // Hearts and Diamonds
 };
 
 // Initialize Cards
@@ -43,13 +46,23 @@ const BaseCards = /** @type MO52Card[] */ (StandardCards.standard52DeckOfCards).
     card.value = 1;
   }
 
-  // Rename 10 to X so it centers better
-  // if (card.initial === "10") {
-  //   card.initial = "X";
-  // }
-
   // Setup suit icons
   card.suit = suitIcons[card.suit[0]];
+
+  // Rename Royals to their number rank and provide target hints
+  if (card.nameRank === "Jack") {
+    card.initial = "11";
+    card.suit = suitIcons["any"];
+  } else if (card.nameRank === "Queen") {
+    card.initial = "12";
+    if (card.suit === suitIcons["C"] || card.suit === suitIcons["S"]) {
+      card.suit = suitIcons["C"] + suitIcons["S"]; // Clubs and Spades
+    } else {
+      card.suit = suitIcons["H"] + suitIcons["D"]; // Hearts and Diamonds
+    }
+  } else if (card.nameRank === "King") {
+    card.initial = "13";
+  }
 
   // Turn all cards face-down to start
   card.facingDown = true;

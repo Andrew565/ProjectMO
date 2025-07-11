@@ -2,8 +2,12 @@
 
 Roughly in order of priority.
 
+- TODO: Make "11's" placeable anywhere in outer piles (pay attention to jokers)
+- TODO: Update instructions to reflect "Firewalls" instead of Royals
+- TODO: Fix the "No valid placements" lose condition (investigate what the problem is, forgot to write it down)
+- TODO: Add an indicator for when defeat conditions are met
 - TODO: Create an "easy mode" that ignores the same suit and same color rules?
-- TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile
+- TODO: Add "tap to peek" somehow so that people can see what cards are in each inner pile?
 - TODO: Add graphics to the rules?
 - TODO: Add a more "interactive" tutorial
 - TODO: Add local statistics (be sure to include a reset button, attempts, wins, and losses)

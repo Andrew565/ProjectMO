@@ -54,7 +54,7 @@ details {
 .grid {
   margin: 0 auto;
   display: grid;
-  height: 65vh;
+  height: calc(94px*5);
   width: 95vw;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -62,10 +62,10 @@ details {
 
 .pile {
   background-color: var(--black);
-  border: 1px solid var(--french-gray);
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 94px;
 }
 
 .pile--valid {
@@ -74,7 +74,6 @@ details {
 
 .pile--drawpile {
   background-color: var(--aquamarine);
-  border: 2px solid var(--cerulean);
 }
 
 .pile--outer .mo-card:not(:first-child) {

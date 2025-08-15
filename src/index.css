@@ -35,8 +35,13 @@ a {
   color: var(--neon-green);
 }
 
+summary {
+  cursor: pointer;
+}
+
 details {
   margin-bottom: 1em;
+  font-weight: 400;
 }
 
 #gameControls {
